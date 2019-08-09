@@ -1,1 +1,1 @@
-I'm on holiday, developing is stopped for a while, for a short while. :)
+I'm on holidays, developing is stopped for a while, for a short while. :)
