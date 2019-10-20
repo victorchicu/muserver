@@ -54,7 +54,7 @@ public class ConnectServer implements IServer {
   CommandLine cl = parser.parse(cliOptions, args);
 
   if (!cl.hasOption("p")) {
-   throw new ConnectServerException("--path argument to the startup.json file is required for starting connect server");
+   throw new ConnectServerException("Please, set --path for configuration file");
   }
 
   String path = cl.getOptionValue("p");
@@ -96,7 +96,7 @@ public class ConnectServer implements IServer {
        .childHandler(tcpConnectServerInitializer)
        .bind(commonConfigs.connectServer().tcpPort());
 
-   logger.info(String.format("Connect Server is running and listens for connections"));
+   logger.info(String.format("Connect Server is running and listening for connections"));
   } catch (IOException e) {
    throw new ConnectServerException(e.getMessage(), e);
   }

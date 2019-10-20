@@ -1,17 +1,11 @@
 package muserver.common.utils;
 
-import com.google.common.primitives.Bytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.buffer.UnpooledDirectByteBuf;
+import muserver.common.Globals;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.*;
 import java.nio.file.Files;
-import java.util.Arrays;
 
 public class SimpleModulus {
  public static final Integer FILE_HEADER = 4370;
@@ -19,51 +13,138 @@ public class SimpleModulus {
  public static final Integer ENCRYPTION_KEY_SIZE = 4;
  public static final Integer ENCRYPTION_BLOCK_SIZE = 8;
 
+ public static final Long[] READWRITE_XOR_KEY_TABLE = {Long.valueOf(0x3F08A79B), Long.valueOf(0xE25CC287), Long.valueOf(0x93D27AB9), Long.valueOf(0x20DEA7BF)};
+
  public static final byte[] XOR_FILTER_TABLE = new byte[]{
      (byte) 0xAB, 0x11, (byte) 0xCD, (byte) 0xFE, 0x18, 0x23, (byte) 0xC5, (byte) 0xA3, (byte) 0xCA, 0x33, (byte) 0xC1, (byte) 0xCC, 0x66, 0x67, 0x21, (byte) 0xF3, 0x32, 0x12, 0x15, 0x35, 0x29, (byte) 0xFF, (byte) 0xFE, 0x1D, 0x44, (byte) 0xEF, (byte) 0xCD, 0x41, 0x26, 0x3C, 0x4E, 0x4D,
  };
 
- public static final Integer[] XOR_TABLE = {
-     0x3F08A79B,
-     0xE25CC287,
-     0x93D27AB9,
-     0x20DEA7BF
- };
+ private final SimpleKeys encKeys, decKeys;
 
- public static final Integer[] XOR_KEY_TABLE = {
-     0xBD1D,
-     0xB455,
-     0x3B43,
-     0x9239
- };
-
- public static final Integer[] MODULUS_KEY_TABLE = {
-     0x1F44F,
-     0x28386,
-     0x1125B,
-     0x1A192
- };
-
- public static final Integer[] DECRYPTION_KEY_TABLE = {
-     0x7B38,
-     0x7FF,
-     0xDEB3,
-     0x27C7,
- };
-
- public static final byte[] XOR_FILTER = new byte[]{
-         (byte) 0xAB, 0x11, (byte) 0xCD, (byte) 0xFE, 0x18, 0x23, (byte) 0xC5, (byte) 0xA3, (byte) 0xCA, 0x33, (byte) 0xC1, (byte) 0xCC, 0x66, 0x67, 0x21, (byte) 0xF3, 0x32, 0x12, 0x15, 0x35, 0x29, (byte) 0xFF, (byte) 0xFE, 0x1D, 0x44, (byte) 0xEF, (byte) 0xCD, 0x41, 0x26, 0x3C, 0x4E, 0x4D,
- };
-
- public static int encrypt(byte[] lpDest, byte[] lpSource, int iSize) {
-  throw new UnsupportedOperationException();
+ public SimpleModulus(SimpleKeys encKeys, SimpleKeys decKeys) {
+  this.encKeys = encKeys;
+  this.decKeys = decKeys;
  }
 
- public static int encryptBlock(Integer[] lpDest, byte[] lpSource, int iSize) {
-  throw new UnsupportedOperationException();
+ public static boolean printKeys(File file) throws Exception {
+  byte[] fileBuf = Files.readAllBytes(file.toPath());
+
+  ByteArrayInputStream stream = new ByteArrayInputStream(fileBuf);
+
+  byte[] content = EndianUtils.readBytes(stream, fileBuf.length);
+
+  ByteBuf byteBuf = Unpooled.wrappedBuffer(content);
+
+  int fileHeader = byteBuf.readUnsignedShortLE();
+
+  if (fileHeader != FILE_HEADER) {
+   throw new Exception("Invalid file header");
+  }
+
+  long fileLength = byteBuf.readUnsignedIntLE();
+
+  if (fileLength != fileBuf.length) {
+   throw new Exception("Invalid file length");
+  }
+
+  System.out.println("MODULUS");
+  Long[] modulusKeys = new Long[]{
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE()
+  };
+  for (int n = 0; n < 4; n++) {
+   System.out.println(String.format("0x%X", (READWRITE_XOR_KEY_TABLE[n] ^ modulusKeys[n])));
+  }
+
+  System.out.println("KEY");
+  Long[] encryptionKeys = new Long[]{
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE()
+  };
+  for (int n = 0; n < 4; n++) {
+   System.out.println(String.format("0x%X", (READWRITE_XOR_KEY_TABLE[n] ^ encryptionKeys[n])));
+  }
+
+
+  System.out.println("XOR");
+  Long[] decryptionKeys = new Long[]{
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE(),
+      byteBuf.readUnsignedIntLE()
+  };
+  for (int n = 0; n < 4; n++) {
+   System.out.println(String.format("0x%X", (READWRITE_XOR_KEY_TABLE[n] ^ decryptionKeys[n])));
+  }
+
+  return true;
  }
 
- public static int decrypt(ByteBuf lpDest, ByteBuf lpSource, int iSize) throws IOException {
+ public int encrypt(ByteBuf lpDest, ByteBuf lpSource, int iSize) {
+  int iTempSize = iSize, iTempSize2, iOriSize;
+
+  int iDec = ((iSize + 7) / 8);
+
+  iSize = (iDec + iDec * 4) * 2 + iDec;
+
+  if (lpDest != null) {
+   iOriSize = iTempSize;
+   for (int i = 0; i < iTempSize; i += 8, iOriSize -= 8, lpDest = lpDest.slice(11, lpDest.capacity() - 11)) {
+    iTempSize2 = iOriSize;
+    if (iOriSize >= 8) {
+     iTempSize2 = 8;
+    }
+    encryptBlock(lpDest, lpSource.slice(i, lpSource.capacity() - i), iTempSize2);
+   }
+  }
+
+  return iSize;
+ }
+
+ public int encryptBlock(ByteBuf lpDest, ByteBuf lpSource, int iSize) {
+  ByteBuf dwEncBuffer = Unpooled.buffer(Integer.BYTES * 4);
+
+  long dwEncValue = 0;
+
+  for (int i = 0; i < 4; i++) {
+   int position = i * Integer.BYTES;
+   long val = (((encKeys.modulusKeys()[i] ^ lpSource.getUnsignedShortLE(position)) ^ dwEncValue) * decKeys.encryptionKeys()[i]) % decKeys.modulusKeys()[i];
+   dwEncBuffer.setIntLE(position, (int) val);
+   dwEncValue = dwEncBuffer.getUnsignedIntLE(position);
+  }
+
+  for (int i = 0; i < 3; i++) {
+   int position = i * Integer.BYTES;
+   long val = dwEncBuffer.getIntLE(position) ^ encKeys.xorKeys()[i] ^ (dwEncBuffer.getIntLE(position + 4));
+   dwEncBuffer.setIntLE(position, (int) val);
+  }
+
+  int iBitPos = 0;
+
+  for (int i = 0; i < 4; i++) {
+   iBitPos = addBits(lpDest, iBitPos, dwEncBuffer.slice(i * 4, 4), 0, 16);
+   iBitPos = addBits(lpDest, iBitPos, dwEncBuffer.slice(i * 4, 4), 22, 2);
+  }
+
+  short btCheckSum = 0xF8;
+
+  for (int i = 0; i < 8; i++) {
+   btCheckSum ^= lpSource.getUnsignedByte(i);
+  }
+
+  ByteBuf dwEncValueBuf = Unpooled.copyLong(dwEncValue);
+
+  dwEncValueBuf.setByte(1, btCheckSum);
+  dwEncValueBuf.setByte(0, btCheckSum ^ iSize ^ 0x3D);
+
+  return addBits(lpDest, iBitPos, dwEncValueBuf, 0, 16);
+ }
+
+ public int decrypt(ByteBuf lpDest, ByteBuf lpSrc, int iSize) throws IOException {
   if (lpDest == null) {
    return (iSize * 8) / 11;
   }
@@ -73,7 +154,7 @@ public class SimpleModulus {
 
   if (iSize > 0) {
    while (decLen < iSize) {
-    int tempResult = decryptBlock(lpDest, lpSource);
+    int tempResult = decryptBlock(lpDest, lpSrc);
 
     if (result < 0) {
      return result;
@@ -81,18 +162,20 @@ public class SimpleModulus {
 
     result += tempResult;
     decLen += 11;
-    lpDest = lpDest.slice(8, lpDest.readableBytes() - 8);
-    lpSource = lpSource.slice(11, lpSource.readableBytes() - 11);
+
+    lpSrc = lpSrc.slice(11, lpSrc.capacity() - 11);
+    lpDest = lpDest.slice(8, lpDest.capacity() - 8);
    }
   }
 
   return result;
  }
 
- public static int decryptBlock(ByteBuf lpDest, ByteBuf lpSource) throws IOException {
-  lpDest.setZero(0, 8);
+ public int decryptBlock(ByteBuf lpDest, ByteBuf lpSource) throws IOException {
   ByteBuf dwDecBuffer = Unpooled.buffer(Integer.BYTES * 4);
+
   int iBitPosition = 0;
+
   for (int i = 0; i < 4; i++) {
    addBits(dwDecBuffer.slice(i * 4, 4), 0, lpSource, iBitPosition, 16);
    iBitPosition += 16;
@@ -100,47 +183,48 @@ public class SimpleModulus {
    iBitPosition += 2;
   }
 
-  //todo: Re-order dwDecBuffer for correct results
-
   for (int i = 2; i >= 0; i--) {
    int position = i * 4;
-   long val = (dwDecBuffer.getUnsignedIntLE(position) ^ XOR_KEY_TABLE[i]) ^ dwDecBuffer.getUnsignedShortLE(position + 4);
-   dwDecBuffer.setInt(position, (int) val);
+   long val = (dwDecBuffer.getUnsignedIntLE(position) ^ decKeys.xorKeys()[i]) ^ dwDecBuffer.getUnsignedShortLE(position + 4);
+   dwDecBuffer.setIntLE(position, (int) val);
   }
 
-  Integer temp = 0, temp1;
+  int temp = 0;
 
   for (int i = 0; i < 4; i++) {
-   temp1 = ((DECRYPTION_KEY_TABLE[i] * (dwDecBuffer.getInt(i))) % (MODULUS_KEY_TABLE[i])) ^ XOR_KEY_TABLE[i] ^ temp;
-   temp = dwDecBuffer.getInt(i) & 0xFFFF;
-   lpDest.setShort(i, temp1);
+   int position = i * Integer.BYTES;
+   short val = (short) (((decKeys.encryptionKeys()[i] * (dwDecBuffer.getUnsignedIntLE(position))) % (decKeys.modulusKeys()[i])) ^ decKeys.xorKeys()[i] ^ temp);
+   lpDest.setShortLE(i * Short.BYTES, val);
+   temp = (short) dwDecBuffer.getUnsignedIntLE(position);
   }
 
 
   dwDecBuffer.setZero(0, 4);
   addBits(dwDecBuffer, 0, lpSource, iBitPosition, 16);
-  dwDecBuffer.setByte(0, (byte) (dwDecBuffer.getByte(1) ^ dwDecBuffer.getByte(0) ^ 0x3D));
+  dwDecBuffer.setByte(0, (byte) (dwDecBuffer.getUnsignedByte(1) ^ dwDecBuffer.getUnsignedByte(0) ^ 0x3D));
 
-  byte btCheckSum = (byte) 0xF8;
+  short btCheckSum = 0xF8;
 
   for (int i = 0; i < 8; i++) {
-   btCheckSum ^= lpDest.getByte(i);
+   btCheckSum ^= lpDest.getUnsignedByte(i);
   }
 
-  if (btCheckSum != dwDecBuffer.getByte(1)) {
+  if (btCheckSum != dwDecBuffer.getUnsignedByte(1)) {
    return -1;
   }
 
-  return dwDecBuffer.getByte(0);
+  return dwDecBuffer.getUnsignedByte(0);
  }
 
- public static int addBits(ByteBuf lpDest, int iDestBitPos, ByteBuf lpSource, int iBitSourcePos, int iBitLen) {
+ public int addBits(ByteBuf lpDest, int iDestBitPos, ByteBuf lpSource, int iBitSourcePos, int iBitLen) {
   int iSourceBufferBitLen = iBitSourcePos + iBitLen;
   int iTempBufferLen = getByteOfBit(iSourceBufferBitLen - 1) + (1 - getByteOfBit(iBitSourcePos));
 
   ByteBuf pTempBuffer = Unpooled.buffer(iTempBufferLen + 1);
   pTempBuffer.setZero(0, iTempBufferLen + 1);
-  pTempBuffer.writeBytes(memcpy(lpSource, iBitSourcePos, iTempBufferLen));
+
+  ByteBuf copyBuff = lpSource.copy(getByteOfBit(iBitSourcePos), iTempBufferLen);
+  pTempBuffer.writeBytes(copyBuff);
 
   if ((iSourceBufferBitLen % 8) != 0) {
    byte val = (byte) (pTempBuffer.getUnsignedByte(iTempBufferLen - 1) & 0xFF << (8 - (iSourceBufferBitLen % 8)));
@@ -164,12 +248,12 @@ public class SimpleModulus {
   return iDestBitPos + iBitLen;
  }
 
- public static byte getByteOfBit(int btByte) {
+ public byte getByteOfBit(int btByte) {
   byte val = (byte) (btByte >> 3);
   return val;
  }
 
- public static void shift(ByteBuf lpBuff, int iSize, int shiftLen) {
+ public void shift(ByteBuf lpBuff, int iSize, int shiftLen) {
   if (shiftLen != 0) {
    if (shiftLen > 0) {
     if ((iSize - 1) > 0) {
@@ -197,63 +281,50 @@ public class SimpleModulus {
   }
  }
 
- public static void xorFilter(ByteBuffer buffer) {
-  short size;
-  if (buffer.get(1) == 0xC1) {
-   size = buffer.get(1);
-  } else {
-   size = (short) (buffer.get(1) * 256 + buffer.get(2));
-  }
-  int start = size - 1, end = buffer.get(1) != 0xC1 ? 3 : 2;
-  for (int i = start; i != end; i += -1) {
-   byte val = buffer.get(i);
-   val ^= buffer.get(i - 1) ^ XOR_FILTER_TABLE[i % 32];
-   buffer.put(i, val);
+ public void extractPacket(ByteBuf buffer) {
+  switch ((byte) buffer.getUnsignedByte(0)) {
+   case Globals.PMHC_BYTE: {
+    int size = buffer.getUnsignedByte(1);
+    xorData(buffer, size - 1, 2);
+   }
+   break;
+   case Globals.PMHC_WORD: {
+    int size = buffer.getUnsignedByte(2) | buffer.getUnsignedByte(1) << 8;
+    xorData(buffer, size - 1, 3);
+   }
+   break;
+   default:
+    return;
   }
  }
 
- public static boolean printAllKeys(File file) throws Exception {
-  byte[] fileBuf = Files.readAllBytes(file.toPath());
-
-  ByteArrayInputStream stream = new ByteArrayInputStream(fileBuf);
-
-  short fileHeader = EndianUtils.readShortLE(stream);
-
-  if (fileHeader != FILE_HEADER) {
-   throw new Exception("Invalid file header");
+ private void xorData(ByteBuf buffer, int start, int end) {
+  for (int i = start; i > end; i--) {
+   short val = buffer.getUnsignedByte(i);
+   val ^= buffer.getUnsignedByte(i - 1) ^ XOR_FILTER_TABLE[i % 32];
+   buffer.setByte(i, val);
   }
-
-  int fileLength = EndianUtils.readShortLE(stream);
-
-  if (fileLength != fileBuf.length) {
-   throw new Exception("Invalid file length");
-  }
-
-  System.out.println("Modulus keys");
-
-  Integer[] modulusKeys = new Integer[]{EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream)};
-  for (int n = 0; n < 4; n++) {
-   System.out.println(String.format("%X", XOR_TABLE[n] ^ modulusKeys[n]));
-  }
-
-  System.out.println("Encryption keys");
-
-  Integer[] encryptionKeys = new Integer[]{EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream)};
-  for (int n = 0; n < 4; n++) {
-   System.out.println(String.format("%X", XOR_TABLE[n] ^ encryptionKeys[n]));
-  }
-
-  System.out.println("Decryption keys");
-
-  Integer[] decryptionKeys = new Integer[]{EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream), EndianUtils.readIntegerLE(stream)};
-  for (int n = 0; n < 4; n++) {
-   System.out.println(String.format("%X", XOR_TABLE[n] ^ decryptionKeys[n]));
-  }
-
-  return true;
  }
 
- private static ByteBuf memcpy(ByteBuf source, int offset, int size) {
-  return source.copy(getByteOfBit(offset), size);
+ public static class SimpleKeys {
+  Long[] modulusKeys, encryptionKeys, xorKeys;
+
+  public SimpleKeys(Long[] modulusKeys, Long[] encryptionKeys, Long[] xorKeys) {
+   this.modulusKeys = modulusKeys;
+   this.encryptionKeys = encryptionKeys;
+   this.xorKeys = xorKeys;
+  }
+
+  public Long[] modulusKeys() {
+   return modulusKeys;
+  }
+
+  public Long[] encryptionKeys() {
+   return encryptionKeys;
+  }
+
+  public Long[] xorKeys() {
+   return xorKeys;
+  }
  }
 }

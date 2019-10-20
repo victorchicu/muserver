@@ -70,12 +70,12 @@ public class TcpJoinServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
   switch (buffer[2]) {
    case 0: {
-    getJoinInfo(ctx, buffer);
+    GJServerInfoRecv(ctx, buffer);
    }
    break;
 
    case 1: {
-    joinIdPassRequest(ctx, buffer);
+    GJConnectAccountRecv(ctx, buffer);
    }
    break;
 
@@ -85,14 +85,18 @@ public class TcpJoinServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
  }
 
 
- private void getJoinInfo(ChannelHandlerContext ctx, byte[] buffer) throws IOException {
-  SDHP_SERVERINFO serverInfo = SDHP_SERVERINFO.deserialize(new ByteArrayInputStream(buffer));
+ private void GJServerInfoRecv(ChannelHandlerContext ctx, byte[] buffer) throws IOException {
+  SDHP_SERVERINFO serverInfo = SDHP_SERVERINFO.deserialize(
+      new ByteArrayInputStream(buffer)
+  );
   logger.info("Server info -> name: {} port: {} type: {}", serverInfo.serverName(), serverInfo.port(), serverInfo.type());
-  SDHP_RESULT result = SDHP_RESULT.create(PBMSG_HEAD.create(Globals.PMHC_BYTE, (byte) SDHP_RESULT.sizeOf(), (byte) 0), (byte) 1, 0);
+  SDHP_RESULT result = SDHP_RESULT.create(
+      PBMSG_HEAD.create(Globals.PMHC_BYTE, (byte) SDHP_RESULT.sizeOf(), (byte) 0), (byte) 1, 0
+  );
   ctx.writeAndFlush(Unpooled.wrappedBuffer(result.serialize(new ByteArrayOutputStream())));
  }
 
- private void joinIdPassRequest(ChannelHandlerContext ctx, byte[] buffer) throws IOException {
+ private void GJConnectAccountRecv(ChannelHandlerContext ctx, byte[] buffer) throws IOException {
   SDHP_IDPASS idPass = SDHP_IDPASS.deserialize(new ByteArrayInputStream(buffer));
 
   String joominNumber = "";
@@ -111,8 +115,6 @@ public class TcpJoinServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
       joominNumber
   );
 
-  byte[] packet = idPassResult.serialize(new ByteArrayOutputStream());
-
-  ctx.writeAndFlush(Unpooled.wrappedBuffer(packet));
+  ctx.writeAndFlush(Unpooled.wrappedBuffer(idPassResult.serialize(new ByteArrayOutputStream())));
  }
 }

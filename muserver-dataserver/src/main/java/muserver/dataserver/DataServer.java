@@ -48,7 +48,7 @@ public class DataServer  implements IServer {
   CommandLine cl = parser.parse(cliOptions, args);
 
   if (!cl.hasOption("p")) {
-   throw new DataServerException("--path argument to the startup.json file is required for starting game service");
+   throw new DataServerException("Please, set --path for configuration file");
   }
 
   String path = cl.getOptionValue("p");
@@ -82,7 +82,7 @@ public class DataServer  implements IServer {
            .childHandler(tcpDataServerInitializer)
            .bind(commonConfigs.dataServer().tcpPort());
 
-   logger.info(String.format("Data server is running and listens for connections"));
+   logger.info(String.format("Data server is running and listening for connections"));
   } catch (Exception e) {
    throw new DataServerException(e.getMessage(), e);
   }

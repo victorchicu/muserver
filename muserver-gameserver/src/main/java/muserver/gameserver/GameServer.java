@@ -48,7 +48,7 @@ public class GameServer implements IServer {
   CommandLine cl = parser.parse(cliOptions, args);
 
   if (!cl.hasOption("p")) {
-   throw new GameServerException("--path argument to the startup.json file is required for starting game service");
+   throw new GameServerException("Please, set --path for configuration file");
   }
 
   String path = cl.getOptionValue("p");
@@ -82,7 +82,7 @@ public class GameServer implements IServer {
        .childHandler(tcpGameServerInitializer)
        .bind(commonConfigs.gameServer().tcpPort());
 
-   logger.info(String.format("Game server is running and listens for connections"));
+   logger.info(String.format("Game server is running and listening for connections"));
   } catch (Exception e) {
    throw new GameServerException(e.getMessage(), e);
   }

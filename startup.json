@@ -1,36 +1,36 @@
 {
  "joinServer": {
-  "hostname": "192.168.0.50",
+  "hostname": "172.20.10.3",
   "tcpPort":  55970,
-  "connectionString": "jdbc:sqlserver://192.168.1.139:1433;instanceName=VM139;databaseName=MuOnline;username=sqlUsername;password=sqlPassword"
+  "connectionString": "jdbc:sqlserver://192.168.1.139:1433;instanceName=VM139;databaseName=MuOnline;username=sa;password=QAZxcv321ZAQ!2wsx"
  },
  "connectServer": {
-  "hostname": "192.168.0.50",
+  "hostname": "172.20.10.3",
   "tcpPort": 44405,
   "servers": [
    {
     "id": 0,
     "name": "GameServer",
-    "ip": "192.168.0.50",
+    "ip": "172.20.10.3",
     "port": 55901,
     "type": "visible"
    },
    {
     "id": 19,
     "name": "GameServerCS",
-    "ip": "192.168.0.50",
+    "ip": "172.20.10.3",
     "port": 55919,
     "type": "hidden"
    }
   ]
  },
  "dataServer": {
-  "hostname": "192.168.0.50",
+  "hostname": "172.20.10.3",
   "tcpPort": 55960,
-  "connectionString": "jdbc:sqlserver://192.168.1.139:1433;instanceName=VM139;databaseName=MuOnline;username=sqlUsername;password=sqlPassword"
+  "connectionString": "jdbc:sqlserver://192.168.1.139:1433;instanceName=VM139;databaseName=MuOnline;username=sa;password=QAZxcv321ZAQ!2wsx"
  },
  "gameServer": {
-  "hostname": "192.168.0.50",
+  "hostname": "172.20.10.3",
   "tcpPort": 55901
  }
 }

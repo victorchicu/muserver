@@ -50,7 +50,7 @@ public class JoinServer implements IServer {
   CommandLine cl = parser.parse(cliOptions, args);
 
   if (!cl.hasOption("p")) {
-   throw new JoinServerException("--path argument to the startup.json file is required for starting join service");
+   throw new JoinServerException("Please, set --path for configuration file");
   }
 
   String path = cl.getOptionValue("p");
@@ -86,7 +86,7 @@ public class JoinServer implements IServer {
        .childHandler(tcpJoinServerInitializer)
        .bind(commonConfigs.joinServer().hostname(), commonConfigs.joinServer().tcpPort());
 
-   logger.info(String.format("Join server is running and listens for connections"));
+   logger.info(String.format("Join server is running and listening for connections"));
   } catch (Exception e) {
    throw new JoinServerException(e.getMessage(), e);
   }

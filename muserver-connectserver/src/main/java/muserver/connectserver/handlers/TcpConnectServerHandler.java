@@ -45,44 +45,51 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
  }
 
  @Override
- public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+ public void channelInactive(ChannelHandlerContext ctx) {
   if (ctx.channel().remoteAddress() != null) {
    logger.info("Connection interrupted: {}", ctx.channel().remoteAddress().toString());
   }
  }
 
  @Override
- public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+ public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
   logger.error(cause.getMessage(), cause);
   ctx.close();
  }
 
  @Override
- public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+ public void channelReadComplete(ChannelHandlerContext ctx) {
   ctx.flush();
  }
 
  @Override
  protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
-  if (byteBuf.readableBytes() < 4) {
-   throw new TcpConnectServerHandlerException(String.format("Invalid buffer length: %d", byteBuf.readableBytes()));
+  handleProtocol(ctx, byteBuf.array(), byteBuf.getUnsignedByte(0), byteBuf.getUnsignedByte(1), byteBuf.getUnsignedByte(2), byteBuf.getUnsignedByte(3));
+ }
+
+
+ private void handleProtocol(ChannelHandlerContext ctx, byte[] byteBuf, short type, short size, short headCode, short subCode) throws Exception {
+  if (type != Globals.PMHC_BYTE) {
+   throw new TcpConnectServerHandlerException(String.format("Invalid protocol type: %d", type));
   }
 
-  byte[] buffer = new byte[byteBuf.readableBytes()];
-
-  byteBuf.getBytes(0, buffer);
-
-  if (buffer[0] != Globals.PMHC_BYTE) {
-   throw new TcpConnectServerHandlerException(String.format("Invalid protocol type: %d", buffer[0]));
+  if (size != 4) {
+   throw new TcpConnectServerHandlerException(String.format("Invalid buffer length: %d", size));
   }
 
-  logger.info(HexUtils.toString(buffer));
+//  0000   c1 04 f4 06
+//  0000   c2 00 0b f4 06 00 01 00 00 00 cc                  ...........
 
-  switch (buffer[2]) {
-   case (byte) 0xF4: {
-    switch (buffer[3]) {
+//  0000   c1 06 f4 03 00 00                                 ......
+//  0000   c1 16 f4 03 31 39 32 2e 31 36 38 2e 31 2e 31 33   ....192.168.1.13
+//  0010   39 00 00 00 5d da                                 9...].
+
+
+  switch (headCode) {
+   case 0xF4: {
+    switch (subCode) {
      case 3: {
-      PMSG_REQ_SERVER_INFO requestServerInfo = PMSG_REQ_SERVER_INFO.deserialize(new ByteArrayInputStream(buffer));
+      PMSG_REQ_SERVER_INFO requestServerInfo = PMSG_REQ_SERVER_INFO.deserialize(new ByteArrayInputStream(byteBuf));
 
       ServerConfigs serverConfigs = this.connectServerContext.serversConfigsMap().getOrDefault(requestServerInfo.serverCode().shortValue(), null);
 
@@ -101,14 +108,14 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
      break;
 
      case 6: {
-      PBMSG_HEAD2 header = PBMSG_HEAD2.deserialize(new ByteArrayInputStream(buffer));
+      PBMSG_HEAD2 header = PBMSG_HEAD2.deserialize(new ByteArrayInputStream(byteBuf));
 
       List<PMSG_SERVER> servers = new ArrayList<>();
 
       for (ServerConfigs serverConfigs : this.connectServerContext.serversConfigsMap().values()) {
        if (serverConfigs.type() == ServerType.VISIBLE) {
         //todo: Request players count from GS
-        servers.add(PMSG_SERVER.create(serverConfigs.id(), (byte) 0, (byte) 0xCC));
+        servers.add(PMSG_SERVER.create(serverConfigs.id(), (byte) 1, (byte) 0xCC));
        }
       }
 
@@ -125,14 +132,14 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
      break;
 
      default: {
-      throw new TcpConnectServerHandlerException(String.format("Unsupported subcode: %d", buffer[3]));
+      throw new TcpConnectServerHandlerException(String.format("Unsupported subcode: %d", subCode));
      }
     }
    }
    break;
 
    default: {
-    throw new TcpConnectServerHandlerException(String.format("Unsupported headcode: %d", buffer[2]));
+    throw new TcpConnectServerHandlerException(String.format("Unsupported headcode: %d", headCode));
    }
   }
  }

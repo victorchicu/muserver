@@ -1,10 +1,12 @@
 package muserver.gameserver.handlers;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.Globals;
 import muserver.common.utils.HexUtils;
+import muserver.common.utils.SimpleModulus;
 import muserver.gameserver.contexts.GameServerContext;
 import muserver.gameserver.exceptions.GameServerException;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +14,15 @@ import org.apache.logging.log4j.Logger;
 
 public class TcpGameServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
  private final static Logger logger = LogManager.getLogger(TcpGameServerHandler.class);
+
+ private final SimpleModulus simpleModulus = new SimpleModulus(
+     new SimpleModulus.SimpleKeys(
+         Globals.DEC1_MODULUS_KEY_TABLE, Globals.DEC1_KEY_TABLE, Globals.DEC1_XOR_KEY_TABLE
+     ),
+     new SimpleModulus.SimpleKeys(
+         Globals.ENC2_MODULUS_KEY_TABLE, Globals.ENC2_KEY_TABLE, Globals.ENC2_XOR_KEY_TABLE
+     )
+ );
 
  public TcpGameServerHandler(GameServerContext gameServerContext) {
  }
@@ -47,10 +58,16 @@ public class TcpGameServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
    throw new GameServerException(String.format("Invalid buffer length: %d", byteBuf.readableBytes()));
   }
 
-  byte[] buffer = new byte[byteBuf.readableBytes()];
+  while (byteBuf.readableBytes() > 0) {
+   ByteBuf newBuff = Unpooled.buffer(byteBuf.capacity()), encryptedPacket = byteBuf.slice(2, byteBuf.capacity() - 2);
+   System.out.println(HexUtils.toString(byteBuf.array()));
 
-  byteBuf.getBytes(0, buffer);
+   Integer decryptedSize = simpleModulus.decrypt(newBuff, encryptedPacket, byteBuf.capacity() - 2) + 1;
+   System.out.println(HexUtils.toString(newBuff.array()));
 
-  logger.info(HexUtils.toString(buffer));
+   newBuff.setByte(0, 0xC1).setByte(1, decryptedSize);
+   simpleModulus.extractPacket(newBuff);
+   System.out.println(HexUtils.toString(newBuff.array()));
+  }
  }
 }

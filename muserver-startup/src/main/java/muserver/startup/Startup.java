@@ -6,7 +6,6 @@ import muserver.connectserver.ConnectServer;
 import muserver.dataserver.DataServer;
 import muserver.gameserver.GameServer;
 import muserver.joinserver.JoinServer;
-import muserver.joinserver.exceptions.JoinServerException;
 import muserver.startup.exceptions.StartupException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -31,11 +30,13 @@ public class Startup {
   CommandLine cl = parser.parse(cliOptions, args);
 
   if (!cl.hasOption("p")) {
-   throw new StartupException("--path argument to the startup.json file is required for starting services");
+   throw new StartupException("Please, set --path for configuration file");
   }
 
   String path = cl.getOptionValue("p");
-  
+
+  File configurationFile = new File(path);
+
   IServer connectServer = new ConnectServer(), joinServer = new JoinServer(), dataServer = new DataServer(), gameServer = new GameServer();
 
   Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -60,29 +61,27 @@ public class Startup {
    }
   }));
 
-  File startup = new File(path);
-
   CompletableFuture.runAsync(() -> {
    try {
-    connectServer.startup(startup);
+    connectServer.startup(configurationFile);
    } catch (ServerException e) {
     logger.fatal(e.getMessage(), e);
    }
   }).thenRun(() -> {
    try {
-    joinServer.startup(startup);
+    joinServer.startup(configurationFile);
    } catch (ServerException e) {
     logger.fatal(e.getMessage(), e);
    }
   }).thenRun(() -> {
    try {
-    dataServer.startup(startup);
+    dataServer.startup(configurationFile);
    } catch (ServerException e) {
     logger.fatal(e.getMessage(), e);
    }
   }).thenRun(() -> {
    try {
-    gameServer.startup(startup);
+    gameServer.startup(configurationFile);
    } catch (ServerException e) {
     logger.fatal(e.getMessage(), e);
    }
