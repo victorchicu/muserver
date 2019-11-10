@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <parent>
+  <groupId>muserver</groupId>
+  <artifactId>muserver</artifactId>
+  <version>1.0</version>
+ </parent>
+ <modelVersion>4.0.0</modelVersion>
+
+ <artifactId>integration-tests</artifactId>
+
+ <dependencies>
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>database-dialect</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>common</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>connect-server</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>data-server</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>game-server</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>muserver</groupId>
+   <artifactId>join-server</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+ </dependencies>
+</project>
