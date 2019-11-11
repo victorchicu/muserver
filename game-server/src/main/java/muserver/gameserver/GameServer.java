@@ -2,7 +2,7 @@ package muserver.gameserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.gameserver.initializers.GameServerChannelInitializer;
+import muserver.gameserver.channels.GameServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

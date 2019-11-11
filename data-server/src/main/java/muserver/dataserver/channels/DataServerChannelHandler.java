@@ -1,4 +1,4 @@
-package muserver.dataserver.handlers;
+package muserver.dataserver.channels;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -9,12 +9,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-public class DataServerProtocolHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private final static Logger logger = LogManager.getLogger(DataServerProtocolHandler.class);
+public class DataServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private final static Logger logger = LogManager.getLogger(DataServerChannelHandler.class);
 
  private final Map<String, Object> props;
 
- public DataServerProtocolHandler(Map<String, Object> props) {
+ DataServerChannelHandler(Map<String, Object> props) {
   this.props = props;
  }
 

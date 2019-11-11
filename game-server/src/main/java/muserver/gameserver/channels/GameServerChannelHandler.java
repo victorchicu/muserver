@@ -1,4 +1,4 @@
-package muserver.gameserver.handlers;
+package muserver.gameserver.channels;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -9,12 +9,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-public class GameServerProtocolHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private final static Logger logger = LogManager.getLogger(GameServerProtocolHandler.class);
+public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private final static Logger logger = LogManager.getLogger(GameServerChannelHandler.class);
 
  private final Map<String, Object> props;
 
- public GameServerProtocolHandler(Map<String, Object> props) {
+ GameServerChannelHandler(Map<String, Object> props) {
   this.props = props;
  }
 

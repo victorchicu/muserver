@@ -1,4 +1,4 @@
-package muserver.connectserver.handlers;
+package muserver.connectserver.channels;
 
 import com.google.common.collect.ImmutableMap;
 import io.netty.buffer.ByteBuf;
@@ -8,13 +8,16 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.Globals;
+import muserver.connectserver.handlers.SendAcceptClientHandler;
+import muserver.connectserver.handlers.SendServerConnectHandler;
+import muserver.connectserver.handlers.SendServerListHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-public class ConnectServerProtocolHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private static final Logger logger = LogManager.getLogger(ConnectServerProtocolHandler.class);
+public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private static final Logger logger = LogManager.getLogger(ConnectServerChannelHandler.class);
 
  private static final Map<Integer, AbstractPacketHandler> packets = ImmutableMap.of(
   0xF403, new SendServerConnectHandler(),
@@ -23,7 +26,7 @@ public class ConnectServerProtocolHandler extends SimpleChannelInboundHandler<By
 
  private final Map<String, Object> props;
 
- public ConnectServerProtocolHandler(Map<String, Object> props) {
+ ConnectServerChannelHandler(Map<String, Object> props) {
   this.props = props;
  }
 
@@ -32,7 +35,7 @@ public class ConnectServerProtocolHandler extends SimpleChannelInboundHandler<By
   if (ctx.channel().remoteAddress() != null) {
    logger.info("Accepted a client connection from remote address: {}", ctx.channel().remoteAddress().toString());
   }
-  new SendAcceptClientHandler().sendRequest(ctx, Unpooled.buffer());
+  new SendAcceptClientHandler().send(ctx, Unpooled.buffer());
  }
 
  @Override
@@ -94,18 +97,18 @@ public class ConnectServerProtocolHandler extends SimpleChannelInboundHandler<By
    break;
   }
 
-  int opcode = byteBuf.readerIndex(2).readUnsignedShort();
+  int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
 
-  AbstractPacketHandler packetHandler = packets.getOrDefault(opcode, null);
+  AbstractPacketHandler packetHandler = packets.getOrDefault(protoNum, null);
 
   if (packetHandler == null) {
    ctx.close();
    if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid packet opcode: {} | from: {}", opcode, ctx.channel().remoteAddress().toString());
+    logger.warn("Invalid packet opcode: {} | from: {}", protoNum, ctx.channel().remoteAddress().toString());
    }
    return;
   }
 
-  packetHandler.sendRequest(ctx, byteBuf);
+  packetHandler.send(ctx, byteBuf);
  }
 }

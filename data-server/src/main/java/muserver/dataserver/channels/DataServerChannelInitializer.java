@@ -1,8 +1,7 @@
-package muserver.dataserver.initializers;
+package muserver.dataserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.dataserver.handlers.DataServerProtocolHandler;
 
 import java.util.Map;
 
@@ -13,6 +12,6 @@ public class DataServerChannelInitializer extends AbstractChannelInitializer {
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new DataServerProtocolHandler(props()));
+  socketChannel.pipeline().addLast(new DataServerChannelHandler(props()));
  }
 }

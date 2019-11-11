@@ -2,7 +2,7 @@ package muserver.connectserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.connectserver.intializers.ConnectServerChannelInitializer;
+import muserver.connectserver.channels.ConnectServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package muserver.joinserver.handlers;
+package muserver.joinserver.channels;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -9,12 +9,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-public class JoinServerProtocolHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private final static Logger logger = LogManager.getLogger(JoinServerProtocolHandler.class);
+public class JoinServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private final static Logger logger = LogManager.getLogger(JoinServerChannelHandler.class);
 
  private final Map<String, Object> props;
 
- public JoinServerProtocolHandler(Map<String, Object> props) {
+ JoinServerChannelHandler(Map<String, Object> props) {
   this.props = props;
  }
 

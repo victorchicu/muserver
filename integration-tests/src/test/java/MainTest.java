@@ -1,13 +1,13 @@
 import com.google.common.collect.ImmutableMap;
 import muserver.common.AbstractServer;
 import muserver.connectserver.ConnectServer;
-import muserver.connectserver.intializers.ConnectServerChannelInitializer;
+import muserver.connectserver.channels.ConnectServerChannelInitializer;
 import muserver.dataserver.DataServer;
-import muserver.dataserver.initializers.DataServerChannelInitializer;
+import muserver.dataserver.channels.DataServerChannelInitializer;
 import muserver.gameserver.GameServer;
-import muserver.gameserver.initializers.GameServerChannelInitializer;
+import muserver.gameserver.channels.GameServerChannelInitializer;
 import muserver.joinserver.JoinServer;
-import muserver.joinserver.initializers.JoinServerChannelInitializer;
+import muserver.joinserver.channels.JoinServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

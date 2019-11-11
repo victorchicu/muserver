@@ -6,7 +6,8 @@ import muserver.common.AbstractPacketHandler;
 
 public class SendServerListHandler extends AbstractPacketHandler {
     @Override
-    public void sendRequest(ChannelHandlerContext ctx, ByteBuf byteBuf) {
+    public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
 
+        super.send(ctx, byteBuf);
     }
 }

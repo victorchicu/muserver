@@ -2,7 +2,7 @@ package muserver.dataserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.dataserver.initializers.DataServerChannelInitializer;
+import muserver.dataserver.channels.DataServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

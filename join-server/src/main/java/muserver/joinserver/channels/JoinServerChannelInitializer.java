@@ -1,8 +1,7 @@
-package muserver.joinserver.initializers;
+package muserver.joinserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.joinserver.handlers.JoinServerProtocolHandler;
 
 import java.util.Map;
 
@@ -13,6 +12,6 @@ public class JoinServerChannelInitializer extends AbstractChannelInitializer {
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new JoinServerProtocolHandler(props()));
+  socketChannel.pipeline().addLast(new JoinServerChannelHandler(props()));
  }
 }

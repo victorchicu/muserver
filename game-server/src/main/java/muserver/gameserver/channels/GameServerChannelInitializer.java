@@ -1,8 +1,7 @@
-package muserver.gameserver.initializers;
+package muserver.gameserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.gameserver.handlers.GameServerProtocolHandler;
 
 import java.util.Map;
 
@@ -13,6 +12,6 @@ public class GameServerChannelInitializer extends AbstractChannelInitializer {
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new GameServerProtocolHandler(props()));
+  socketChannel.pipeline().addLast(new GameServerChannelHandler(props()));
  }
 }
