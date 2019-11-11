@@ -2,7 +2,7 @@ package muserver.joinserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.joinserver.initializers.TcpJoinServerInitializer;
+import muserver.joinserver.initializers.JoinServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +16,12 @@ public class JoinServer extends AbstractServer {
   super(initializer);
  }
 
- public static void main(String[] args) throws Exception {
+ public static void main(String[] args) {
   JoinServer joinServer = null;
   try {
    Map<String, Object> props = new HashMap<>();
    props.put("port", 55970);
-   joinServer = new JoinServer(new TcpJoinServerInitializer(props));
+   joinServer = new JoinServer(new JoinServerChannelInitializer(props));
    joinServer.start();
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {

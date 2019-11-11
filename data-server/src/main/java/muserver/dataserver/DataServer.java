@@ -2,7 +2,7 @@ package muserver.dataserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.dataserver.initializers.TcpDataServerInitializer;
+import muserver.dataserver.initializers.DataServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +16,12 @@ public class DataServer extends AbstractServer {
   super(initializer);
  }
 
- public static void main(String[] args) throws Exception {
+ public static void main(String[] args) {
   DataServer dataServer = null;
   try {
    Map<String, Object> props = new HashMap<>();
    props.put("port", 55960);
-   dataServer = new DataServer(new TcpDataServerInitializer(props));
+   dataServer = new DataServer(new DataServerChannelInitializer(props));
    dataServer.start();
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/../integration-tests/target/classes" />
-    <output-test url="file://$MODULE_DIR$/../integration-tests/target/test-classes" />
-    <content url="file://$MODULE_DIR$/../integration-tests">
-      <sourceFolder url="file://$MODULE_DIR$/../integration-tests/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../integration-tests/src/test/resources" type="java-test-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/../integration-tests/target" />
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="muserver-connectserver" />
-    <orderEntry type="module" module-name="muserver-dataserver" />
-    <orderEntry type="module" module-name="muserver-gameserver" />
-    <orderEntry type="module" module-name="muserver-joinserver" />
     <orderEntry type="module" module-name="database-dialect" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-dbcp2:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.6.1" level="project" />

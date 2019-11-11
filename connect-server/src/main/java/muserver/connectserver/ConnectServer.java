@@ -2,7 +2,7 @@ package muserver.connectserver;
 
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.connectserver.intializers.TcpConnectServerInitializer;
+import muserver.connectserver.intializers.ConnectServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +16,12 @@ public class ConnectServer extends AbstractServer {
   super(initializer);
  }
 
- public static void main(String[] args) throws Exception {
+ public static void main(String[] args) {
   ConnectServer connectServer = null;
   try {
    Map<String, Object> props = new HashMap<>();
    props.put("port", 44405);
-   connectServer = new ConnectServer(new TcpConnectServerInitializer(props));
+   connectServer = new ConnectServer(new ConnectServerChannelInitializer(props));
    connectServer.start();
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {
