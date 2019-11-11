@@ -12,3 +12,5 @@ common/target/
 connect-server/target/
 
 integration-tests/target/
+
+data-server/target/
