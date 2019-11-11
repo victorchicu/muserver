@@ -1,24 +1,26 @@
 package muserver.connectserver.handlers;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.common.Globals;
+import muserver.common.AbstractPacket;
+import muserver.common.pairs.Pair;
 import muserver.common.utils.PacketUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
  private final static Logger logger = LogManager.getLogger(TcpConnectServerHandler.class);
 
  private final Map<String, Object> props;
+ private final Map<Pair<Short, Short>, AbstractPacket> packets;
 
  public TcpConnectServerHandler(Map<String, Object> props) {
   this.props = props;
+  this.packets = new HashMap<>();
  }
 
  @Override
@@ -57,8 +59,13 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
    logger.info(PacketUtils.toHex(buffer));
   }
 
-//  requestServerList()
+//  Pair
 
-//  0xC1 0x4 0xF4 0x6
+  //  0xC1 0x4 0xF4 0x6
+
+  short opcode = byteBuf.getUnsignedByte(2), subCode = byteBuf.getUnsignedByte(3);
+
+
+
  }
 }
