@@ -3,7 +3,7 @@ package muserver.dataserver.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.common.utils.BytesUtils;
+import muserver.common.utils.PacketUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,7 +48,7 @@ public class TcpDataServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
   if (byteBuf.readableBytes() > 0) {
    byte[] buffer = new byte[byteBuf.readableBytes()];
    byteBuf.readBytes(buffer);
-   logger.info(BytesUtils.toString(buffer));
+   logger.info(PacketUtils.toHex(buffer));
   }
  }
 }

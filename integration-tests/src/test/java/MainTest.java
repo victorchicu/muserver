@@ -1,5 +1,6 @@
 import com.google.common.collect.ImmutableMap;
 import muserver.common.AbstractServer;
+import muserver.common.utils.PacketUtils;
 import muserver.connectserver.ConnectServer;
 import muserver.connectserver.intializers.TcpConnectServerInitializer;
 import muserver.dataserver.DataServer;
@@ -19,16 +20,21 @@ public class MainTest {
 
  public static void main(String... args) throws Exception {
   List<AbstractServer> servers = Arrays.asList(
-    new ConnectServer(new TcpConnectServerInitializer(ImmutableMap.of("port", 44405))),
-    new DataServer(new TcpDataServerInitializer(ImmutableMap.of("port", 55960))),
-    new GameServer(new TcpGameServerInitializer(ImmutableMap.of("port", 55960))),
-    new JoinServer(new TcpJoinServerInitializer(ImmutableMap.of("port", 55970)))
+    new ConnectServer(
+      new TcpConnectServerInitializer(ImmutableMap.of("port", 44405))
+    ),
+    new DataServer(
+      new TcpDataServerInitializer(ImmutableMap.of("port", 55960))
+    ),
+    new GameServer(
+      new TcpGameServerInitializer(ImmutableMap.of("port", 55901))
+    ),
+    new JoinServer(
+      new TcpJoinServerInitializer(ImmutableMap.of("port", 55970))
+    )
   );
-
   try {
-   servers.stream().forEach(x -> {
-    x.start();
-   });
+   servers.stream().forEach(x -> x.start());
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {
    logger.fatal(e.getMessage(), e);

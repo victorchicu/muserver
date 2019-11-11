@@ -5,9 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.Globals;
-import muserver.common.messages.PBMSG_HEAD;
-import muserver.common.utils.BytesUtils;
-import muserver.connectserver.messages.PMSG_HANDSHAKE;
+import muserver.common.utils.PacketUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,12 +27,8 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
    logger.info("Connection accepted: {}", ctx.channel().remoteAddress().toString());
   }
 
-  PMSG_HANDSHAKE handshake = PMSG_HANDSHAKE.create(
-    PBMSG_HEAD.create(Globals.PMHC_BYTE, (byte) PMSG_HANDSHAKE.sizeOf(), (byte) 0),
-    (byte) 1
-  );
-  byte[] buffer = handshake.serialize(new ByteArrayOutputStream());
-  ctx.writeAndFlush(Unpooled.wrappedBuffer(buffer));
+  //0xC1-0x4-0x0-0x1
+//  ctx.writeAndFlush(Unpooled.wrappedBuffer(0xC1, 0x4, 0x0, 0x1));
  }
 
  @Override
@@ -60,8 +54,10 @@ public class TcpConnectServerHandler extends SimpleChannelInboundHandler<ByteBuf
   if (byteBuf.readableBytes() > 0) {
    byte[] buffer = new byte[byteBuf.readableBytes()];
    byteBuf.readBytes(buffer);
-   logger.info(BytesUtils.toString(buffer));
+   logger.info(PacketUtils.toHex(buffer));
   }
+
+//  requestServerList()
 
 //  0xC1 0x4 0xF4 0x6
  }
