@@ -17,8 +17,8 @@ public class ConnectServerProtocolHandler extends SimpleChannelInboundHandler<By
  private static final Logger logger = LogManager.getLogger(ConnectServerProtocolHandler.class);
 
  private static final Map<Integer, AbstractPacketHandler> packets = ImmutableMap.of(
-  0xF103, new SendServerConnectHandler(),
-  0xF106, new SendServerListHandler()
+  0xF403, new SendServerConnectHandler(),
+  0xF406, new SendServerListHandler()
  );
 
  private final Map<String, Object> props;
