@@ -6,8 +6,6 @@ import muserver.dataserver.DataServer;
 import muserver.dataserver.channels.DataServerChannelInitializer;
 import muserver.gameserver.GameServer;
 import muserver.gameserver.channels.GameServerChannelInitializer;
-import muserver.joinserver.JoinServer;
-import muserver.joinserver.channels.JoinServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,9 +24,6 @@ public class MainTest {
    ),
    new GameServer(
     new GameServerChannelInitializer(ImmutableMap.of("port", 55901))
-   ),
-   new JoinServer(
-    new JoinServerChannelInitializer(ImmutableMap.of("port", 55970))
    )
   );
   try {

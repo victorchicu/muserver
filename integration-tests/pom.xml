@@ -12,40 +12,40 @@
  <artifactId>integration-tests</artifactId>
 
  <dependencies>
+  <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
   <dependency>
-   <groupId>muserver</groupId>
-   <artifactId>database-dialect</artifactId>
-   <version>${project.parent.version}</version>
+   <groupId>org.junit.jupiter</groupId>
+   <artifactId>junit-jupiter-api</artifactId>
+   <version>5.4.2</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
    <artifactId>common</artifactId>
    <version>${project.parent.version}</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>connect-server</artifactId>
+   <artifactId>connectserver</artifactId>
    <version>${project.parent.version}</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>data-server</artifactId>
+   <artifactId>dataserver</artifactId>
    <version>${project.parent.version}</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>game-server</artifactId>
+   <artifactId>gameserver</artifactId>
    <version>${project.parent.version}</version>
-  </dependency>
-
-  <dependency>
-   <groupId>muserver</groupId>
-   <artifactId>join-server</artifactId>
-   <version>${project.parent.version}</version>
+   <scope>test</scope>
   </dependency>
  </dependencies>
 </project>
