@@ -14,3 +14,9 @@ connect-server/target/
 integration-tests/target/
 
 data-server/target/
+
+connectserver/target/
+
+dataserver/target/
+
+gameserver/target/

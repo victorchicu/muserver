@@ -62,14 +62,6 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
   short type = byteBuf.getUnsignedByte(0);
 
-  if (type < 0xC1 || type > 0xC4) {
-   ctx.close();
-   if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid packet type: {} | from: {}", type, ctx.channel().remoteAddress().toString());
-   }
-   return;
-  }
-
   switch (type) {
    case 0xC1:
    case 0xC3: {
@@ -77,7 +69,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_BYTE_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid packet size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
      }
      return;
     }
@@ -89,12 +81,19 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_SHORT_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid packet size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
      }
      return;
     }
    }
    break;
+   default: {
+    ctx.close();
+    if (ctx.channel().remoteAddress() != null) {
+     logger.warn("Invalid protocol type: {} | from: {}", type, ctx.channel().remoteAddress().toString());
+    }
+    return;
+   }
   }
 
   int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
@@ -104,7 +103,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
   if (packetHandler == null) {
    ctx.close();
    if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid packet opcode: {} | from: {}", protoNum, ctx.channel().remoteAddress().toString());
+    logger.warn("Invalid protocol number: {} | from: {}", protoNum, ctx.channel().remoteAddress().toString());
    }
    return;
   }

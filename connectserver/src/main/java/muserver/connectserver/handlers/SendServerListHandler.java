@@ -11,10 +11,18 @@ public class SendServerListHandler extends AbstractPacketHandler {
 
     @Override
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
+        int serversCount = 1;
+
+        int size = (7 + (1 * 4));
+
         byteBuf.writeByte(0xC2);
-        byteBuf.writeShortLE(0);
+        byteBuf.writeShortLE(size);
         byteBuf.writeByte(0xF4);
         byteBuf.writeByte(0x6);
+        byteBuf.writeShortLE(serversCount);
+        byteBuf.writeShortLE(0);
+        byteBuf.writeShortLE(1);
+
         super.send(ctx, byteBuf);
     }
 }
