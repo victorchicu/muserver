@@ -1,0 +1,11 @@
+{
+  "port": 44405,
+  "servers": {
+    "0": {
+      "ip": "192.168.88.30",
+      "port": 55901,
+      "name": "GameServer",
+      "visible": true
+    }
+  }
+}

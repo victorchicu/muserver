@@ -2,16 +2,17 @@ package muserver.dataserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
 import muserver.common.channels.AbstractChannelInitializer;
+import muserver.common.objects.IConfigs;
 
 import java.util.Map;
 
 public class DataServerChannelInitializer extends AbstractChannelInitializer {
- public DataServerChannelInitializer(Map<String, Object> props) {
-  super(props);
+ public DataServerChannelInitializer() {
+  super(null);
  }
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new DataServerChannelHandler(props()));
+  socketChannel.pipeline().addLast(new DataServerChannelHandler(null));
  }
 }

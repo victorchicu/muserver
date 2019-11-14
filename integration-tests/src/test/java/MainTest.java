@@ -1,5 +1,6 @@
 import com.google.common.collect.ImmutableMap;
 import muserver.common.AbstractServer;
+import muserver.common.objects.ConnectorConfigs;
 import muserver.connectserver.ConnectServer;
 import muserver.connectserver.channels.ConnectServerChannelInitializer;
 import muserver.dataserver.DataServer;
@@ -17,13 +18,15 @@ public class MainTest {
  public static void main(String... args) {
   List<AbstractServer> servers = Arrays.asList(
    new ConnectServer(
-    new ConnectServerChannelInitializer(ImmutableMap.of("port", 44405))
+    new ConnectServerChannelInitializer(ConnectorConfigs.create(44405, ImmutableMap.of(
+     0, ConnectorConfigs.Server.create("127.0.0.1", 55901, "GameServer", true)
+    )))
    ),
    new DataServer(
-    new DataServerChannelInitializer(ImmutableMap.of("port", 55960))
+    new DataServerChannelInitializer()
    ),
    new GameServer(
-    new GameServerChannelInitializer(ImmutableMap.of("port", 55901))
+    new GameServerChannelInitializer()
    )
   );
   try {

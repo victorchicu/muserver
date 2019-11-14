@@ -45,6 +45,6 @@ public class DataServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
 
  @Override
  protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-  logger.info(ByteBufUtil.hexDump(byteBuf));
+  logger.info("\n{}", ByteBufUtil.prettyHexDump(byteBuf));
  }
 }

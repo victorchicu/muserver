@@ -19,10 +19,10 @@ public class DataServer extends AbstractServer {
  public static void main(String[] args) {
   DataServer dataServer = null;
   try {
-   Map<String, Object> props = new HashMap<>();
-   props.put("port", 55960);
-   dataServer = new DataServer(new DataServerChannelInitializer(props));
+   dataServer = new DataServer(new DataServerChannelInitializer());
+
    dataServer.start();
+
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {
    logger.fatal(e.getMessage(), e);

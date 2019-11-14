@@ -6,12 +6,12 @@ import muserver.common.channels.AbstractChannelInitializer;
 import java.util.Map;
 
 public class GameServerChannelInitializer extends AbstractChannelInitializer {
- public GameServerChannelInitializer(Map<String, Object> props) {
-  super(props);
+ public GameServerChannelInitializer() {
+  super(null);
  }
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new GameServerChannelHandler(props()));
+  socketChannel.pipeline().addLast(new GameServerChannelHandler(null));
  }
 }

@@ -19,10 +19,10 @@ public class GameServer extends AbstractServer {
  public static void main(String[] args) {
   GameServer gameServer = null;
   try {
-   Map<String, Object> props = new HashMap<>();
-   props.put("port", 55901);
-   gameServer = new GameServer(new GameServerChannelInitializer(props));
+   gameServer = new GameServer(new GameServerChannelInitializer());
+
    gameServer.start();
+
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {
    logger.fatal(e.getMessage(), e);

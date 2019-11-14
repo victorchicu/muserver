@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.Globals;
+import muserver.common.objects.ConnectorConfigs;
 import muserver.connectserver.handlers.SendAcceptClientHandler;
 import muserver.connectserver.handlers.SendServerConnectHandler;
 import muserver.connectserver.handlers.SendServerListHandler;
@@ -19,15 +20,13 @@ import java.util.Map;
 public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
  private static final Logger logger = LogManager.getLogger(ConnectServerChannelHandler.class);
 
- private static final Map<Integer, AbstractPacketHandler> packets = ImmutableMap.of(
-  0xF403, new SendServerConnectHandler(),
-  0xF406, new SendServerListHandler()
- );
+ private final Map<Integer, AbstractPacketHandler> packets;
 
- private final Map<String, Object> props;
-
- ConnectServerChannelHandler(Map<String, Object> props) {
-  this.props = props;
+ ConnectServerChannelHandler(ConnectorConfigs configs) {
+  packets = ImmutableMap.of(
+   0xF403, new SendServerConnectHandler(),
+   0xF406, new SendServerListHandler(configs)
+  );
  }
 
  @Override
@@ -69,7 +68,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_BYTE_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid protocol size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} | from remote address: {}", size, type, ctx.channel().remoteAddress().toString());
      }
      return;
     }
@@ -81,7 +80,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_SHORT_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid protocol size: {} for type: {} | from: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} | from remote address: {}", size, type, ctx.channel().remoteAddress().toString());
      }
      return;
     }
@@ -90,7 +89,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    default: {
     ctx.close();
     if (ctx.channel().remoteAddress() != null) {
-     logger.warn("Invalid protocol type: {} | from: {}", type, ctx.channel().remoteAddress().toString());
+     logger.warn("Invalid protocol type: {} | from remote address: {}", type, ctx.channel().remoteAddress().toString());
     }
     return;
    }
@@ -98,16 +97,16 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
   int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
 
-  AbstractPacketHandler packetHandler = packets.getOrDefault(protoNum, null);
+  AbstractPacketHandler packetHandler = packets.get(protoNum);
 
   if (packetHandler == null) {
    ctx.close();
    if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid protocol number: {} | from: {}", protoNum, ctx.channel().remoteAddress().toString());
+    logger.warn("Invalid protocol number: {} | from remote address: {}", protoNum, ctx.channel().remoteAddress().toString());
    }
    return;
   }
 
-  packetHandler.send(ctx, byteBuf);
+  packetHandler.send(ctx, Unpooled.buffer());
  }
 }

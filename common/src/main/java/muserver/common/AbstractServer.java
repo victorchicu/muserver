@@ -21,13 +21,12 @@ public abstract class AbstractServer {
  }
 
  public ChannelFuture start() {
-  Integer tcpPort = (Integer) initializer.props().get("port");
-  logger.info("Start {} on port {}", getClass().getSimpleName(), tcpPort);
+  logger.info("Start {} on port {}", getClass().getSimpleName(), initializer.configs().port());
   return new ServerBootstrap()
-    .group(tcpParentLoopGroup, tcpChildLoopGroup)
-    .channel(NioServerSocketChannel.class)
-    .childHandler(initializer)
-    .bind(tcpPort);
+   .group(tcpParentLoopGroup, tcpChildLoopGroup)
+   .channel(NioServerSocketChannel.class)
+   .childHandler(initializer)
+   .bind(initializer.configs().port());
  }
 
  public void shutdown() {
