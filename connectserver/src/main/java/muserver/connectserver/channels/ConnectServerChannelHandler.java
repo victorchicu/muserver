@@ -15,6 +15,7 @@ import muserver.connectserver.handlers.SendServerListHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.nio.ByteOrder;
 import java.util.Map;
 
 public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
@@ -24,7 +25,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
  ConnectServerChannelHandler(ConnectorConfigs configs) {
   packets = ImmutableMap.of(
-   0xF403, new SendServerConnectHandler(),
+   0xF403, new SendServerConnectHandler(configs),
    0xF406, new SendServerListHandler(configs)
   );
  }
@@ -68,7 +69,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_BYTE_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid protocol size: {} | from remote address: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} | from remote address: {}", size, ctx.channel().remoteAddress().toString());
      }
      return;
     }
@@ -80,7 +81,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
     if (size <= 0 || size > Globals.UNSIGNED_SHORT_MAX_VALUE) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
-      logger.warn("Invalid protocol size: {} | from remote address: {}", size, type, ctx.channel().remoteAddress().toString());
+      logger.warn("Invalid protocol size: {} | from remote address: {}", size, ctx.channel().remoteAddress().toString());
      }
      return;
     }

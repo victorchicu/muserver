@@ -12,7 +12,7 @@ public class SendAcceptClientHandler extends AbstractPacketHandler {
 
  @Override
  public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-  byteBuf.writeBytes(new byte[]{(byte) 0xC1, 0x4, 0x0, 0x1});
+  byteBuf.writeByte(0xC1).writeByte(0x4).writeByte(0x0).writeByte(0x1);
   super.send(ctx, byteBuf);
  }
 }
