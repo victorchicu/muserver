@@ -23,10 +23,10 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
  private final Map<Integer, AbstractPacketHandler> packets;
 
- ConnectServerChannelHandler(ConnectorConfigs configs) {
+ ConnectServerChannelHandler(ConnectorConfigs connectorConfigs) {
   packets = ImmutableMap.of(
-   0xF403, new SendServerConnectHandler(configs),
-   0xF406, new SendServerListHandler(configs)
+   0xF403, new SendServerConnectHandler(connectorConfigs),
+   0xF406, new SendServerListHandler(connectorConfigs)
   );
  }
 
@@ -35,7 +35,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
   if (ctx.channel().remoteAddress() != null) {
    logger.info("Accepted a client connection from remote address: {}", ctx.channel().remoteAddress().toString());
   }
-  new SendAcceptClientHandler().send(ctx, Unpooled.buffer());
+  new SendAcceptClientHandler().send(ctx, Unpooled.directBuffer(4));
  }
 
  @Override

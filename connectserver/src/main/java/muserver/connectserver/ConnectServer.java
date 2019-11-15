@@ -27,13 +27,9 @@ public class ConnectServer extends AbstractServer {
     throw new IllegalStateException("Couldn't load configs from resources");
    } else {
     String json = IOUtils.toString(stream, Charset.defaultCharset());
-
     ConnectorConfigs connectorConfigs = objectMapper.readValue(json, ConnectorConfigs.class);
-
     connectServer = new ConnectServer(new ConnectServerChannelInitializer(connectorConfigs));
-
     connectServer.start();
-
     Thread.sleep(Long.MAX_VALUE);
    }
   } catch (Exception e) {

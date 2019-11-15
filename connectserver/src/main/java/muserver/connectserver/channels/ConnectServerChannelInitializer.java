@@ -7,8 +7,8 @@ import muserver.common.objects.ConnectorConfigs;
 import java.util.Map;
 
 public class ConnectServerChannelInitializer extends AbstractChannelInitializer {
- public ConnectServerChannelInitializer(ConnectorConfigs configs) {
-  super(configs);
+ public ConnectServerChannelInitializer(ConnectorConfigs connectorConfigs) {
+  super(connectorConfigs);
  }
 
  @Override

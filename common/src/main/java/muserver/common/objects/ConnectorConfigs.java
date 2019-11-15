@@ -8,12 +8,6 @@ import java.util.Map;
 
 @AutoValue
 public abstract class ConnectorConfigs implements IConfigs {
- @JsonProperty("port")
- public abstract Integer port();
-
- @JsonProperty("servers")
- public abstract Map<Integer, Server> servers();
-
  @JsonCreator
  public static ConnectorConfigs create(
   @JsonProperty("port") Integer port,
@@ -29,20 +23,14 @@ public abstract class ConnectorConfigs implements IConfigs {
   return new AutoValue_ConnectorConfigs.Builder();
  }
 
+ @JsonProperty("port")
+ public abstract Integer port();
+
+ @JsonProperty("servers")
+ public abstract Map<Integer, Server> servers();
+
  @AutoValue
  public static abstract class Server {
-  @JsonProperty("ip")
-  public abstract String ip();
-
-  @JsonProperty("port")
-  public abstract Integer port();
-
-  @JsonProperty("name")
-  public abstract String name();
-
-  @JsonProperty("visible")
-  public abstract Boolean visible();
-
   @JsonCreator
   public static Server create(
    @JsonProperty("ip") String ip,
@@ -61,6 +49,18 @@ public abstract class ConnectorConfigs implements IConfigs {
   static Builder builder() {
    return new AutoValue_ConnectorConfigs_Server.Builder();
   }
+
+  @JsonProperty("ip")
+  public abstract String ip();
+
+  @JsonProperty("port")
+  public abstract Integer port();
+
+  @JsonProperty("name")
+  public abstract String name();
+
+  @JsonProperty("visible")
+  public abstract Boolean visible();
 
   @AutoValue.Builder
   public abstract static class Builder {

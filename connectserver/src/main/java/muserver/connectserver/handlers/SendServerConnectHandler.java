@@ -5,9 +5,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.objects.ConnectorConfigs;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import sun.text.normalizer.UBiDiProps;
 
 public class SendServerConnectHandler extends AbstractPacketHandler {
     private final ConnectorConfigs configs;
