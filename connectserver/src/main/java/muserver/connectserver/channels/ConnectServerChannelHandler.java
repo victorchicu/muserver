@@ -108,6 +108,6 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    return;
   }
 
-  packetHandler.send(ctx, Unpooled.buffer());
+  packetHandler.send(ctx, byteBuf);
  }
 }

@@ -1,6 +1,7 @@
 package muserver.connectserver.handlers;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.objects.ConnectorConfigs;
@@ -16,18 +17,18 @@ public class SendServerListHandler extends AbstractPacketHandler {
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int size = (7 + (configs.servers().size() * 4));
 
-        byteBuf.writeByte(0xC2);
-        byteBuf.writeShort(size);
-        byteBuf.writeByte(0xF4);
-        byteBuf.writeByte(0x06);
+        ByteBuf directBuffer = Unpooled.directBuffer(size);
 
-        byteBuf.writeShort(configs.servers().size());
+        directBuffer.writeByte(0xC2);
+        directBuffer.writeShort(size);
+        directBuffer.writeByte(0xF4);
+        directBuffer.writeByte(0x06);
+        directBuffer.writeShort(configs.servers().size());
 
         for (Integer key : configs.servers().keySet()) {
-            //todo: (online / capacity) * 100 for writeByte(50)
-            byteBuf.writeByte(key).writeByte(0).writeByte(50).writeByte(0xCC);
+            directBuffer.writeByte(key).writeByte(65 / 100 * 100).writeByte(50).writeByte(0xCC);
         }
 
-        super.send(ctx, byteBuf);
+        super.send(ctx, directBuffer);
     }
 }

@@ -11,7 +11,6 @@ public abstract class AbstractPacketHandler {
 
  public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
   logger.info("\n{}", ByteBufUtil.prettyHexDump(byteBuf));
-
   ctx.writeAndFlush(byteBuf);
  }
 }
