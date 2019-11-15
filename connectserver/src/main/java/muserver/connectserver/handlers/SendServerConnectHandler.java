@@ -22,10 +22,12 @@ public class SendServerConnectHandler extends AbstractPacketHandler {
 
         ConnectorConfigs.Server server = configs.servers().get(serverCode);
 
-        ByteBuf directBuffer = Unpooled.directBuffer(22);
+        int size = 22;
+
+        ByteBuf directBuffer = Unpooled.directBuffer(size);
 
         directBuffer.writeByte(0xC1);
-        directBuffer.writeByte(22);
+        directBuffer.writeByte(size);
         directBuffer.writeByte(0xF4);
         directBuffer.writeByte(3);
 
@@ -36,14 +38,16 @@ public class SendServerConnectHandler extends AbstractPacketHandler {
             i++;
         }
 
-        int n = 16 - i;
+        directBuffer.writeByte(0);
+
+        int n = 16 - i - 1;
 
         while (n > 0) {
-            directBuffer.writeByte(0);
+            directBuffer.writeByte(0xFE);
             n--;
         }
 
-        directBuffer.writeShort(server.port());
+        directBuffer.writeShortLE(server.port());
 
         super.send(ctx, directBuffer);
     }
