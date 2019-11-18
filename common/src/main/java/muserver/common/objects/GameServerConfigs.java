@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class GameConfigs implements IConfigs {
+public abstract class GameServerConfigs extends AbstractConfigs {
  public static Builder builder() {
-  return new AutoValue_GameConfigs.Builder();
+  return new AutoValue_GameServerConfigs.Builder();
  }
 
  @JsonCreator
- public static GameConfigs create(@JsonProperty("port") Integer port, @JsonProperty("version") String version) {
+ public static GameServerConfigs create(@JsonProperty("port") Integer port, @JsonProperty("version") String version) {
   return builder()
     .port(port)
     .version(version)
@@ -30,6 +30,6 @@ public abstract class GameConfigs implements IConfigs {
 
   public abstract Builder version(String version);
 
-  public abstract GameConfigs build();
+  public abstract GameServerConfigs build();
  }
 }

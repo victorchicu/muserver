@@ -3,7 +3,7 @@ package muserver.connectserver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.common.objects.ConnectorConfigs;
+import muserver.common.objects.ConnectorServerConfigs;
 import muserver.connectserver.channels.ConnectServerChannelInitializer;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -27,8 +27,8 @@ public class ConnectServer extends AbstractServer {
     throw new IllegalStateException("Couldn't load configs from resources");
    } else {
     String json = IOUtils.toString(stream, Charset.defaultCharset());
-    ConnectorConfigs connectorConfigs = objectMapper.readValue(json, ConnectorConfigs.class);
-    connectServer = new ConnectServer(new ConnectServerChannelInitializer(connectorConfigs));
+    ConnectorServerConfigs connectorServerConfigs = objectMapper.readValue(json, ConnectorServerConfigs.class);
+    connectServer = new ConnectServer(new ConnectServerChannelInitializer(connectorServerConfigs));
     connectServer.start();
     Thread.sleep(Long.MAX_VALUE);
    }

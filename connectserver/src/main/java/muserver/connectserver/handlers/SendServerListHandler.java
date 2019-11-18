@@ -4,12 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.AbstractPacketHandler;
-import muserver.common.objects.ConnectorConfigs;
+import muserver.common.objects.ConnectorServerConfigs;
 
 public class SendServerListHandler extends AbstractPacketHandler {
-    private final ConnectorConfigs configs;
+    private final ConnectorServerConfigs configs;
 
-    public SendServerListHandler(ConnectorConfigs configs) {
+    public SendServerListHandler(ConnectorServerConfigs configs) {
         this.configs = configs;
     }
 

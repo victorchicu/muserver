@@ -2,17 +2,15 @@ package muserver.gameserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.common.objects.GameConfigs;
-
-import java.util.Map;
+import muserver.common.objects.GameServerConfigs;
 
 public class GameServerChannelInitializer extends AbstractChannelInitializer {
- public GameServerChannelInitializer(GameConfigs configs) {
+ public GameServerChannelInitializer(GameServerConfigs configs) {
   super(configs);
  }
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new GameServerChannelHandler((GameConfigs) configs()));
+  socketChannel.pipeline().addLast(new GameServerChannelHandler((GameServerConfigs) configs()));
  }
 }

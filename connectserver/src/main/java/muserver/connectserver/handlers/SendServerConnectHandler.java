@@ -4,12 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.AbstractPacketHandler;
-import muserver.common.objects.ConnectorConfigs;
+import muserver.common.objects.ConnectorServerConfigs;
 
 public class SendServerConnectHandler extends AbstractPacketHandler {
-    private final ConnectorConfigs configs;
+    private final ConnectorServerConfigs configs;
 
-    public SendServerConnectHandler(ConnectorConfigs configs) {
+    public SendServerConnectHandler(ConnectorServerConfigs configs) {
         this.configs = configs;
     }
 
@@ -17,7 +17,7 @@ public class SendServerConnectHandler extends AbstractPacketHandler {
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-        ConnectorConfigs.Server server = configs.servers().get(serverCode);
+        ConnectorServerConfigs.Server server = configs.servers().get(serverCode);
 
         int size = 22;
 

@@ -3,8 +3,7 @@ package muserver.gameserver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import muserver.common.AbstractServer;
 import muserver.common.channels.AbstractChannelInitializer;
-import muserver.common.objects.ConnectorConfigs;
-import muserver.common.objects.GameConfigs;
+import muserver.common.objects.GameServerConfigs;
 import muserver.gameserver.channels.GameServerChannelInitializer;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +27,8 @@ public class GameServer extends AbstractServer {
     throw new IllegalStateException("Couldn't load configs from resources");
    } else {
     String json = IOUtils.toString(stream, Charset.defaultCharset());
-    GameConfigs gameConfigs = objectMapper.readValue(json, GameConfigs.class);
-    gameServer = new GameServer(new GameServerChannelInitializer(gameConfigs));
+    GameServerConfigs gameServerConfigs = objectMapper.readValue(json, GameServerConfigs.class);
+    gameServer = new GameServer(new GameServerChannelInitializer(gameServerConfigs));
     gameServer.start();
     Thread.sleep(Long.MAX_VALUE);
    }

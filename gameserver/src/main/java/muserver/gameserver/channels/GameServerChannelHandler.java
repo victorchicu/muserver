@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.Globals;
-import muserver.common.objects.GameConfigs;
+import muserver.common.objects.GameServerConfigs;
 import muserver.gameserver.handlers.SendAcceptClientHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,11 +18,11 @@ import java.util.Map;
 public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
  private final static Logger logger = LogManager.getLogger(GameServerChannelHandler.class);
 
- private final GameConfigs gameConfigs;
+ private final GameServerConfigs gameServerConfigs;
  private final Map<Integer, AbstractPacketHandler> packets = new HashMap<>();
 
- GameServerChannelHandler(GameConfigs gameConfigs) {
-  this.gameConfigs = gameConfigs;
+ GameServerChannelHandler(GameServerConfigs gameServerConfigs) {
+  this.gameServerConfigs = gameServerConfigs;
 
  }
 
@@ -31,7 +31,7 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
   if (ctx.channel().remoteAddress() != null) {
    logger.info("Accepted a client connection from remote address: {}", ctx.channel().remoteAddress().toString());
   }
-  new SendAcceptClientHandler(gameConfigs).send(ctx, Unpooled.directBuffer(0x0C));
+  new SendAcceptClientHandler(gameServerConfigs).send(ctx, Unpooled.directBuffer(0x0C));
  }
 
  @Override
@@ -91,19 +91,5 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
     return;
    }
   }
-
-  int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
-
-  AbstractPacketHandler packetHandler = packets.get(protoNum);
-
-  if (packetHandler == null) {
-   ctx.close();
-   if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid protocol number: {} | from remote address: {}", protoNum, ctx.channel().remoteAddress().toString());
-   }
-   return;
-  }
-
-  packetHandler.send(ctx, byteBuf);
  }
 }

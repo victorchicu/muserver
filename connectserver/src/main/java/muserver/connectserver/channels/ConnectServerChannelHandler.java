@@ -8,14 +8,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.AbstractPacketHandler;
 import muserver.common.Globals;
-import muserver.common.objects.ConnectorConfigs;
+import muserver.common.objects.ConnectorServerConfigs;
 import muserver.connectserver.handlers.SendAcceptClientHandler;
 import muserver.connectserver.handlers.SendServerConnectHandler;
 import muserver.connectserver.handlers.SendServerListHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.ByteOrder;
 import java.util.Map;
 
 public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
@@ -23,10 +22,10 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
  private final Map<Integer, AbstractPacketHandler> packets;
 
- ConnectServerChannelHandler(ConnectorConfigs connectorConfigs) {
+ ConnectServerChannelHandler(ConnectorServerConfigs connectorServerConfigs) {
   packets = ImmutableMap.of(
-   0xF403, new SendServerConnectHandler(connectorConfigs),
-   0xF406, new SendServerListHandler(connectorConfigs)
+   0xF403, new SendServerConnectHandler(connectorServerConfigs),
+   0xF406, new SendServerListHandler(connectorServerConfigs)
   );
  }
 

@@ -7,9 +7,9 @@ import com.google.auto.value.AutoValue;
 import java.util.Map;
 
 @AutoValue
-public abstract class ConnectorConfigs implements IConfigs {
+public abstract class ConnectorServerConfigs extends AbstractConfigs {
  @JsonCreator
- public static ConnectorConfigs create(
+ public static ConnectorServerConfigs create(
   @JsonProperty("port") Integer port,
   @JsonProperty("servers") Map<Integer, Server> servers
  ) {
@@ -20,7 +20,7 @@ public abstract class ConnectorConfigs implements IConfigs {
  }
 
  private static Builder builder() {
-  return new AutoValue_ConnectorConfigs.Builder();
+  return new AutoValue_ConnectorServerConfigs.Builder();
  }
 
  @JsonProperty("port")
@@ -82,6 +82,6 @@ public abstract class ConnectorConfigs implements IConfigs {
 
   public abstract Builder servers(Map<Integer, Server> servers);
 
-  public abstract ConnectorConfigs build();
+  public abstract ConnectorServerConfigs build();
  }
 }

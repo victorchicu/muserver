@@ -2,18 +2,16 @@ package muserver.common.channels;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
-import muserver.common.objects.IConfigs;
-
-import java.util.Map;
+import muserver.common.objects.AbstractConfigs;
 
 public abstract class AbstractChannelInitializer extends ChannelInitializer<SocketChannel> {
- private final IConfigs configs;
+ private final AbstractConfigs configs;
 
- public AbstractChannelInitializer(IConfigs configs) {
+ public AbstractChannelInitializer(AbstractConfigs configs) {
   this.configs = configs;
  }
 
- public IConfigs configs() {
+ public AbstractConfigs configs() {
   return configs;
  }
 }
