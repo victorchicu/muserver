@@ -47,7 +47,7 @@ public abstract class ConnectorServerConfigs extends AbstractConfigs {
   }
 
   static Builder builder() {
-   return new AutoValue_ConnectorConfigs_Server.Builder();
+   return new AutoValue_ConnectorServerConfigs_Server.Builder();
   }
 
   @JsonProperty("ip")
