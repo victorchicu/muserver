@@ -1,19 +1,3 @@
-/**
- * Copyright (C) 2013-2014 Project-Vethrfolnir
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package muserver.common.utils;
 
 import io.netty.buffer.*;
@@ -25,26 +9,22 @@ import java.nio.ByteOrder;
 
 import static muserver.common.utils.MuCryptUtils.*;
 
-/**
- * @author Vlad
- *
- */
 public final class MuDecoder {
 	private static final Logger logger = LogManager.getLogger(AbstractPacketHandler.class);
 
 	// Internal use
 	private static ByteBufAllocator alloc = //UnpooledByteBufAllocator.DEFAULT;
-		PooledByteBufAllocator.DEFAULT;
+			PooledByteBufAllocator.DEFAULT;
 
 	// GMO KEYS
 	private static short[] Xor32Keys = new short[]{
-		0xAB, 0x11, 0xCD, 0xFE, 0x18, 0x23, 0xC5, 0xA3,
-		0xCA, 0x33, 0xC1, 0xCC, 0x66, 0x67, 0x21, 0xF3,
-		0x32, 0x12, 0x15, 0x35, 0x29, 0xFF, 0xFE, 0x1D,
-		0x44, 0xEF, 0xCD, 0x41, 0x26, 0x3C, 0x4E, 0x4D
+			0xAB, 0x11, 0xCD, 0xFE, 0x18, 0x23, 0xC5, 0xA3,
+			0xCA, 0x33, 0xC1, 0xCC, 0x66, 0x67, 0x21, 0xF3,
+			0x32, 0x12, 0x15, 0x35, 0x29, 0xFF, 0xFE, 0x1D,
+			0x44, 0xEF, 0xCD, 0x41, 0x26, 0x3C, 0x4E, 0x4D
 	};
 
-	public static ByteBuf DecodeXor32(ByteBuf buff) {
+	public static ByteBuf decodeXor32(ByteBuf buff) {
 
 		if (buff.readerIndex() != 0) {
 			logger.warn("Buffer must be at index 0!");
@@ -55,18 +35,12 @@ public final class MuDecoder {
 		int decodedSize = GetDecodedSize(buff);
 
 		buff.readerIndex(header);
-		DecXor32(buff, header, decodedSize - header);
+		decXor32(buff, header, decodedSize - header);
 		buff.readerIndex(0);
 		return buff;
 	}
 
-	/**
-		* C3 C4
-		*
-		* @param buff
-		* @return
-		*/
-	public static ByteBuf DecodePacket(ByteBuf buff) {
+	public static ByteBuf decodePacket(ByteBuf buff) {
 		if (buff.writerIndex() <= 2) {
 			logger.fatal("Ambiguous buffer! " + ByteBufUtil.hexDump(buff));
 			return null;
@@ -89,7 +63,7 @@ public final class MuDecoder {
 		int originalHead = buff.getUnsignedByte(0);
 
 		buff.readerIndex(header);
-		int size = DecodeBlock(buff, out, header, contentSize);
+		int size = decodeBlock(buff, out, header, contentSize);
 		//buff.clear();
 
 		size += header - 1;
@@ -110,13 +84,13 @@ public final class MuDecoder {
 		out.writerIndex(size);
 		out.readerIndex(header);
 
-		DecXor32(out, header, size);
+		decXor32(out, header, size);
 
 		out.readerIndex(0);
 		return out;
 	}
 
-	private static int DecodeBlock(ByteBuf buff, ByteBuf outBuff, int offset, int size) {
+	private static int decodeBlock(ByteBuf inBuff, ByteBuf outBuff, int offset, int size) {
 		// decripted size
 		int index = 0;
 
@@ -133,10 +107,10 @@ public final class MuDecoder {
 		ByteBuf converter = alloc.heapBuffer(4).order(ByteOrder.LITTLE_ENDIAN);
 
 		for (int i = 0; i < size; i += 11) {
-			buff.readBytes(encrypted);
+			inBuff.readBytes(encrypted);
 
 			//System.out.println("ENC: "+PrintData.printData(encrypted.nioBuffer()));
-			int Result = BlockDecode(decrypted, getAsUByteArray(encrypted, uByteArray), converter, MuKeyFactory.getClientToServerPacketDecKeys());
+			int Result = decodeBlock(decrypted, getAsUByteArray(encrypted, uByteArray), converter, MuKeyFactory.getClientToServerPacketDecKeys());
 			if (Result != -1) {
 				//Buffer.BlockCopy(Decrypted, 0, m_DecryptResult, (OffSet - 1) + DecSize, Result);
 
@@ -158,35 +132,31 @@ public final class MuDecoder {
 		return index;
 	}
 
-	/**
-		* @param decrypted
-		* @return
-		*/
-	private static int BlockDecode(ByteBuf decrypted, short[] InBuf, ByteBuf converter, long[] Keys) {
+	private static int decodeBlock(ByteBuf decrypted, short[] inBuf, ByteBuf converter, long[] keys) {
 
 		long[] Ring = new long[4];
 		short[] Shift = new short[4];
 
-		ShiftBytes(Shift, 0x00, InBuf, 0x00, 0x10);
-		ShiftBytes(Shift, 0x16, InBuf, 0x10, 0x02);
+		shiftBytes(Shift, 0x00, inBuf, 0x00, 0x10);
+		shiftBytes(Shift, 0x16, inBuf, 0x10, 0x02);
 
 		writeByteArray(converter, Shift);
 		flushArray(Shift, 0, 4);
 
-		ShiftBytes(Shift, 0x00, InBuf, 0x12, 0x10);
-		ShiftBytes(Shift, 0x16, InBuf, 0x22, 0x02);
+		shiftBytes(Shift, 0x00, inBuf, 0x12, 0x10);
+		shiftBytes(Shift, 0x16, inBuf, 0x22, 0x02);
 
 		writeByteArray(converter, Shift);
 		flushArray(Shift, 0, 4);
 
-		ShiftBytes(Shift, 0x00, InBuf, 0x24, 0x10);
-		ShiftBytes(Shift, 0x16, InBuf, 0x34, 0x02);
+		shiftBytes(Shift, 0x00, inBuf, 0x24, 0x10);
+		shiftBytes(Shift, 0x16, inBuf, 0x34, 0x02);
 
 		writeByteArray(converter, Shift);
 		flushArray(Shift, 0, 4);
 
-		ShiftBytes(Shift, 0x00, InBuf, 0x36, 0x10);
-		ShiftBytes(Shift, 0x16, InBuf, 0x46, 0x02);
+		shiftBytes(Shift, 0x00, inBuf, 0x36, 0x10);
+		shiftBytes(Shift, 0x16, inBuf, 0x46, 0x02);
 
 		writeByteArray(converter, Shift);
 		flushArray(Shift, 0, 4);
@@ -202,9 +172,9 @@ public final class MuDecoder {
 		}
 		converter.clear();
 
-		Ring[2] = Ring[2] ^ Keys[10] ^ (Ring[3] & 0xFFFF);
-		Ring[1] = Ring[1] ^ Keys[9] ^ (Ring[2] & 0xFFFF);
-		Ring[0] = Ring[0] ^ Keys[8] ^ (Ring[1] & 0xFFFF);
+		Ring[2] = Ring[2] ^ keys[10] ^ (Ring[3] & 0xFFFF);
+		Ring[1] = Ring[1] ^ keys[9] ^ (Ring[2] & 0xFFFF);
+		Ring[0] = Ring[0] ^ keys[8] ^ (Ring[1] & 0xFFFF);
 
 
 //		 System.err.println("Finished Ring: ");
@@ -215,16 +185,16 @@ public final class MuDecoder {
 		int[] CryptBuf = new int[4];
 
 		// Had ushort cast here.
-		CryptBuf[0] = (int) (Keys[8] ^ ((Ring[0] * Keys[4]) % Keys[0]));
+		CryptBuf[0] = (int) (keys[8] ^ ((Ring[0] * keys[4]) % keys[0]));
 
-		CryptBuf[1] = (int) (Keys[9] ^ ((Ring[1] * Keys[5]) % Keys[1]) ^ (Ring[0] & 0xFFFF));
-		CryptBuf[2] = (int) (Keys[10] ^ ((Ring[2] * Keys[6]) % Keys[2]) ^ (Ring[1] & 0xFFFF));
-		CryptBuf[3] = (int) (Keys[11] ^ ((Ring[3] * Keys[7]) % Keys[3]) ^ (Ring[2] & 0xFFFF));
+		CryptBuf[1] = (int) (keys[9] ^ ((Ring[1] * keys[5]) % keys[1]) ^ (Ring[0] & 0xFFFF));
+		CryptBuf[2] = (int) (keys[10] ^ ((Ring[2] * keys[6]) % keys[2]) ^ (Ring[1] & 0xFFFF));
+		CryptBuf[3] = (int) (keys[11] ^ ((Ring[3] * keys[7]) % keys[3]) ^ (Ring[2] & 0xFFFF));
 
 //		System.err.println("Pre done: " + PrintData.printData(CryptBuf));
 
 		short[] Finale = new short[2];
-		ShiftBytes(Finale, 0x00, InBuf, 0x48, 0x10);
+		shiftBytes(Finale, 0x00, inBuf, 0x48, 0x10);
 		Finale[0] ^= Finale[1];
 		Finale[0] ^= 0x3D;
 
@@ -252,53 +222,52 @@ public final class MuDecoder {
 		return Finale[0];
 	}
 
-	private static long ShiftBytes(short[] OutBuf, long Arg_4, short[] InBuf, long Arg_C, long Arg_10) {
-		long Size = ((((Arg_10 + Arg_C) - 1) / 8) + (1 - (Arg_C / 8)));
+	private static long shiftBytes(short[] outBuf, long arg4, short[] inBuf, long argC, long arg10) {
+		long Size = ((((arg10 + argC) - 1) / 8) + (1 - (argC / 8)));
 
 		short[] Tmp = new short[20];
-		System.arraycopy(InBuf, (int) (Arg_C / 8), Tmp, 0, (int) Size);
+		System.arraycopy(inBuf, (int) (argC / 8), Tmp, 0, (int) Size);
 
-		long Var_4 = (Arg_10 + Arg_C) & 0x7;
+		long Var_4 = (arg10 + argC) & 0x7;
 
 		if (Var_4 != 0) // Pay attention, too many casts, look for negatives
 			Tmp[(int) (Size - 1)] = (short) (Tmp[(int) (Size - 1)] & 0xFF << (int) (8 - Var_4));
 
-		Arg_C &= 0x7;
+		argC &= 0x7;
 
-		ShiftRight(Tmp, (int) Size, (int) Arg_C);
-		ShiftLeft(Tmp, (int) Size + 1, (int) (Arg_4 & 0x7));
+		shiftRight(Tmp, (int) Size, (int) argC);
+		shiftLeft(Tmp, (int) Size + 1, (int) (arg4 & 0x7));
 
-		if ((Arg_4 & 0x7) > Arg_C) ++Size;
+		if ((arg4 & 0x7) > argC) ++Size;
 		if (Size != 0)
 			for (int i = 0; i < Size; ++i) {
-				OutBuf[(int) (i + (Arg_4 / 8))] = (short) ((byte) (OutBuf[(int) (i + (Arg_4 / 8))] | Tmp[i]) & 0xFF);
+				outBuf[(int) (i + (arg4 / 8))] = (short) ((byte) (outBuf[(int) (i + (arg4 / 8))] | Tmp[i]) & 0xFF);
 			}
 
-		return Arg_10 + Arg_4;
+		return arg10 + arg4;
 	}
 
-	private static void ShiftLeft(short[] Data, int Size, int Shift) {
-		if (Shift == 0) return;
-		for (int i = 1; i < Size; i++)
-			Data[Size - i] = (byte) ((Data[Size - i] >> Shift) | ((Data[Size - i - 1]) << (8 - Shift)));
+	private static void shiftLeft(short[] data, int size, int shift) {
+		if (shift == 0) return;
+		for (int i = 1; i < size; i++)
+			data[size - i] = (byte) ((data[size - i] >> shift) | ((data[size - i - 1]) << (8 - shift)));
 
-		Data[0] = (short) ((byte) (Data[0] >> Shift) & 0xFF);
+		data[0] = (short) ((byte) (data[0] >> shift) & 0xFF);
 	}
 
-	private static void ShiftRight(short[] Data, int Size, int Shift) {
+	private static void shiftRight(short[] data, int size, int shift) {
 
-		if (Shift == 0) return;
-		for (int i = 1; i < Size; i++)
-			Data[i - 1] = (byte) ((Data[i - 1] << Shift) | (Data[i] >> (8 - Shift)));
+		if (shift == 0) return;
+		for (int i = 1; i < size; i++)
+			data[i - 1] = (byte) ((data[i - 1] << shift) | (data[i] >> (8 - shift)));
 
-		Data[Size - 1] = (short) ((byte) (Data[Size - 1] << Shift) & 0xFF);
+		data[size - 1] = (short) ((byte) (data[size - 1] << shift) & 0xFF);
 	}
 
-	private static void DecXor32(ByteBuf buff, int SizeOfHeader, int Len) {
-
-		for (int i = Len - 1; i > 0; i--) {
+	private static void decXor32(ByteBuf buff, int sizeOfHeader, int len) {
+		for (int i = len - 1; i > 0; i--) {
 			int Buff = buff.getUnsignedByte(buff.readerIndex() + i);
-			Buff ^= (Xor32Keys[(i + SizeOfHeader) & 31] ^ buff.getUnsignedByte((buff.readerIndex() + i) - 1));
+			Buff ^= (Xor32Keys[(i + sizeOfHeader) & 31] ^ buff.getUnsignedByte((buff.readerIndex() + i) - 1));
 			buff.setByte(buff.readerIndex() + i, Buff);
 		}
 	}
@@ -316,7 +285,7 @@ public final class MuDecoder {
 
 			long t1 = System.currentTimeMillis();
 			//DecodeXor32(buff);
-			out = DecodePacket(buff);
+			out = decodePacket(buff);
 			long t2 = System.currentTimeMillis();
 
 			System.out.println("Process time: " + (t2 - t1) + " milis");
