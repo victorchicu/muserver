@@ -2,10 +2,10 @@ package muserver.gameserver.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.AbstractPacketHandler;
+import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.GameServerConfigs;
 
-public class SendAcceptClientHandler extends AbstractPacketHandler {
+public class SendAcceptClientHandler extends BasePacketHandler {
  private final GameServerConfigs gameServerConfigs;
 
  public SendAcceptClientHandler(GameServerConfigs gameServerConfigs) {

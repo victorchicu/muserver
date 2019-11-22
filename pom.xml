@@ -25,7 +25,7 @@
   <module>connectserver</module>
   <module>dataserver</module>
   <module>gameserver</module>
-  <module>integration-tests</module>
+  <module>tests</module>
  </modules>
 
  <build>

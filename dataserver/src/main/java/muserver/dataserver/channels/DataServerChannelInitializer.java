@@ -1,9 +1,9 @@
 package muserver.dataserver.channels;
 
 import io.netty.channel.socket.SocketChannel;
-import muserver.common.channels.AbstractChannelInitializer;
+import muserver.common.channels.BaseChannelInitializer;
 
-public class DataServerChannelInitializer extends AbstractChannelInitializer {
+public class DataServerChannelInitializer extends BaseChannelInitializer {
  public DataServerChannelInitializer() {
   super(null);
  }

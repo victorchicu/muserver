@@ -6,9 +6,9 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.common.AbstractPacketHandler;
+import muserver.common.handlers.BasePacketHandler;
 import muserver.common.Globals;
-import muserver.common.objects.ConnectorServerConfigs;
+import muserver.common.objects.ConnectServerConfigs;
 import muserver.connectserver.handlers.SendAcceptClientHandler;
 import muserver.connectserver.handlers.SendServerConnectHandler;
 import muserver.connectserver.handlers.SendServerListHandler;
@@ -20,12 +20,12 @@ import java.util.Map;
 public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
  private static final Logger logger = LogManager.getLogger(ConnectServerChannelHandler.class);
 
- private final Map<Integer, AbstractPacketHandler> packets;
+ private final Map<Integer, BasePacketHandler> packets;
 
- ConnectServerChannelHandler(ConnectorServerConfigs connectorServerConfigs) {
+ ConnectServerChannelHandler(ConnectServerConfigs connectServerConfigs) {
   packets = ImmutableMap.of(
-   0xF403, new SendServerConnectHandler(connectorServerConfigs),
-   0xF406, new SendServerListHandler(connectorServerConfigs)
+   0xF403, new SendServerConnectHandler(connectServerConfigs),
+   0xF406, new SendServerListHandler(connectServerConfigs)
   );
  }
 
@@ -65,7 +65,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    case 0xC1:
    case 0xC3: {
     short size = byteBuf.getUnsignedByte(1);
-    if (size <= 0 || size > Globals.UNSIGNED_BYTE_MAX_VALUE) {
+    if (size <= 0 || size > Globals.getUnsignedByteMaxValue()) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
       logger.warn("Invalid protocol size: {} | from remote address: {}", size, ctx.channel().remoteAddress().toString());
@@ -77,7 +77,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    case 0xC2:
    case 0xC4: {
     int size = byteBuf.getUnsignedShort(1);
-    if (size <= 0 || size > Globals.UNSIGNED_SHORT_MAX_VALUE) {
+    if (size <= 0 || size > Globals.getUnsignedShortMaxValue()) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
       logger.warn("Invalid protocol size: {} | from remote address: {}", size, ctx.channel().remoteAddress().toString());
@@ -97,7 +97,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
   int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
 
-  AbstractPacketHandler packetHandler = packets.get(protoNum);
+  BasePacketHandler packetHandler = packets.get(protoNum);
 
   if (packetHandler == null) {
    ctx.close();

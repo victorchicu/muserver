@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class DataServerConfigs extends AbstractConfigs {
+public abstract class DataServerConfigs extends CommonConfigs {
  @JsonProperty("port")
  public abstract Integer port();
 

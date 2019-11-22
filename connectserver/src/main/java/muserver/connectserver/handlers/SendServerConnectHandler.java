@@ -3,13 +3,13 @@ package muserver.connectserver.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.AbstractPacketHandler;
-import muserver.common.objects.ConnectorServerConfigs;
+import muserver.common.handlers.BasePacketHandler;
+import muserver.common.objects.ConnectServerConfigs;
 
-public class SendServerConnectHandler extends AbstractPacketHandler {
-    private final ConnectorServerConfigs configs;
+public class SendServerConnectHandler extends BasePacketHandler {
+    private final ConnectServerConfigs configs;
 
-    public SendServerConnectHandler(ConnectorServerConfigs configs) {
+    public SendServerConnectHandler(ConnectServerConfigs configs) {
         this.configs = configs;
     }
 
@@ -17,7 +17,7 @@ public class SendServerConnectHandler extends AbstractPacketHandler {
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-        ConnectorServerConfigs.Server server = configs.servers().get(serverCode);
+        ConnectServerConfigs.Server server = configs.servers().get(serverCode);
 
         int size = 22;
 

@@ -1,16 +1,18 @@
 package muserver.connectserver.channels;
 
-import muserver.common.channels.AbstractChannelInitializer;
+import muserver.common.channels.BaseChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
-import muserver.common.objects.ConnectorServerConfigs;
+import muserver.common.objects.ConnectServerConfigs;
 
-public class ConnectServerChannelInitializer extends AbstractChannelInitializer {
- public ConnectServerChannelInitializer(ConnectorServerConfigs connectorServerConfigs) {
-  super(connectorServerConfigs);
+public class ConnectServerChannelInitializer extends BaseChannelInitializer {
+ private final ConnectServerConfigs configs;
+ public ConnectServerChannelInitializer(ConnectServerConfigs configs) {
+  super(configs);
+  this.configs = configs;
  }
 
  @Override
  protected void initChannel(SocketChannel socketChannel) {
-  socketChannel.pipeline().addLast(new ConnectServerChannelHandler((ConnectorServerConfigs) configs()));
+  socketChannel.pipeline().addLast(new ConnectServerChannelHandler(configs));
  }
 }

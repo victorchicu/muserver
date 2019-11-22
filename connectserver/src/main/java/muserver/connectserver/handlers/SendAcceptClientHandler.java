@@ -2,12 +2,11 @@ package muserver.connectserver.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.AbstractPacketHandler;
-import muserver.connectserver.channels.ConnectServerChannelHandler;
+import muserver.common.handlers.BasePacketHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SendAcceptClientHandler extends AbstractPacketHandler {
+public class SendAcceptClientHandler extends BasePacketHandler {
  private static final Logger logger = LogManager.getLogger(SendAcceptClientHandler.class);
 
  @Override

@@ -5,28 +5,28 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import muserver.common.channels.AbstractChannelInitializer;
+import muserver.common.channels.BaseChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class AbstractServer {
- private final static Logger logger = LogManager.getLogger(AbstractServer.class);
+public abstract class BaseServer {
+ private final static Logger logger = LogManager.getLogger(BaseServer.class);
  private final EventLoopGroup tcpParentLoopGroup, tcpChildLoopGroup;
- private final AbstractChannelInitializer initializer;
+ private final BaseChannelInitializer baseChannelInitializer;
 
- public AbstractServer(AbstractChannelInitializer initializer) {
-  this.initializer = initializer;
+ public BaseServer(BaseChannelInitializer baseChannelInitializer) {
+  this.baseChannelInitializer = baseChannelInitializer;
   tcpChildLoopGroup = new NioEventLoopGroup(1);
   tcpParentLoopGroup = new NioEventLoopGroup(1);
  }
 
  public ChannelFuture start() {
-  logger.info("Start {} on port {}", getClass().getSimpleName(), initializer.configs().port());
+  logger.info("Start {} on port {}", getClass().getSimpleName(), baseChannelInitializer.configs().port());
   return new ServerBootstrap()
    .group(tcpParentLoopGroup, tcpChildLoopGroup)
    .channel(NioServerSocketChannel.class)
-   .childHandler(initializer)
-   .bind(initializer.configs().port());
+   .childHandler(baseChannelInitializer)
+   .bind(baseChannelInitializer.configs().port());
  }
 
  public void shutdown() {

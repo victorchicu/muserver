@@ -1,18 +1,15 @@
 package muserver.dataserver;
 
-import muserver.common.AbstractServer;
-import muserver.common.channels.AbstractChannelInitializer;
+import muserver.common.BaseServer;
+import muserver.common.channels.BaseChannelInitializer;
 import muserver.dataserver.channels.DataServerChannelInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class DataServer extends AbstractServer {
+public class DataServer extends BaseServer {
  private final static Logger logger = LogManager.getLogger(DataServer.class);
 
- public DataServer(AbstractChannelInitializer initializer) {
+ public DataServer(BaseChannelInitializer initializer) {
   super(initializer);
  }
 

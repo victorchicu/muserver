@@ -1,7 +1,7 @@
 package muserver.common.utils;
 
 import io.netty.buffer.*;
-import muserver.common.AbstractPacketHandler;
+import muserver.common.handlers.BasePacketHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
 import static muserver.common.utils.MuCryptUtils.*;
 
 public final class MuDecoder {
-	private static final Logger logger = LogManager.getLogger(AbstractPacketHandler.class);
+	private static final Logger logger = LogManager.getLogger(MuDecoder.class);
 
 	// Internal use
 	private static ByteBufAllocator alloc = //UnpooledByteBufAllocator.DEFAULT;
