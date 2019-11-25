@@ -6,8 +6,8 @@ import muserver.common.handlers.BasePacketHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SendAcceptClientHandler extends BasePacketHandler {
- private static final Logger logger = LogManager.getLogger(SendAcceptClientHandler.class);
+public class AcceptClientHandler extends BasePacketHandler {
+ private static final Logger logger = LogManager.getLogger(AcceptClientHandler.class);
 
  @Override
  public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {

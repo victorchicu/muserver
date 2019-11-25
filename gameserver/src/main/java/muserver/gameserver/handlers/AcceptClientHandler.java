@@ -5,10 +5,13 @@ import io.netty.channel.ChannelHandlerContext;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.GameServerConfigs;
 
-public class SendAcceptClientHandler extends BasePacketHandler {
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+public class AcceptClientHandler extends BasePacketHandler {
  private final GameServerConfigs gameServerConfigs;
 
- public SendAcceptClientHandler(GameServerConfigs gameServerConfigs) {
+ public AcceptClientHandler(GameServerConfigs gameServerConfigs) {
   this.gameServerConfigs = gameServerConfigs;
  }
 
@@ -18,10 +21,11 @@ public class SendAcceptClientHandler extends BasePacketHandler {
 
   byteBuf.writeByte(0xC1);
   byteBuf.writeByte(0x0C);
-  byteBuf.writeByte(0);
-  byteBuf.writeByte(1);
+  byteBuf.writeByte(0xF1);
+  byteBuf.writeByte(0x00);
+  byteBuf.writeByte(0x01);
   byteBuf.writeShort(9000);
-  byteBuf.writeBytes(gameServerConfigs.version().replace(".", "").getBytes());
+  byteBuf.writeBytes(gameServerConfigs.version().getBytes());
 
   super.send(ctx, byteBuf);
  }

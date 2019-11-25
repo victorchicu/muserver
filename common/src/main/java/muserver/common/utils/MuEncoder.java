@@ -1,19 +1,21 @@
 package muserver.common.utils;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
-
-import java.nio.ByteOrder;
-
 import static muserver.common.utils.MuCryptUtils.*;
 
-public final class MuEncoder {
- private static ByteBufAllocator alloc = //UnpooledByteBufAllocator.DEFAULT;
-   PooledByteBufAllocator.DEFAULT;
+import io.netty.buffer.*;
 
- public static ByteBuf encodePacket(ByteBuf buff, int serial) {
+import java.io.File;
+import java.nio.ByteOrder;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public final class MuEncoder {
+ private static final Logger log = LogManager.getLogger(MuEncoder.class);
+
+ private static ByteBufAllocator alloc = PooledByteBufAllocator.DEFAULT;
+
+ public static ByteBuf EncodePacket(ByteBuf buff, int serial) {
   int header = GetHeaderSize(buff);
   int packetSize = GetPacketSize(buff);
   int contentSize = packetSize - header;
@@ -37,7 +39,7 @@ public final class MuEncoder {
 
   //System.out.println("Encoding: "+PrintData.printData(Contents));
 
-  size += encodeBuffer(Contents, out, header, (contentSize + 1));
+  size += EncodeBuffer(Contents, out, header, (contentSize + 1));
 
   out.writerIndex(0);
 
@@ -60,7 +62,7 @@ public final class MuEncoder {
   return out;
  }
 
- private static int encodeBuffer(short[] contents, ByteBuf out, int header, int Size) {
+ private static int EncodeBuffer(short[] contents, ByteBuf out, int header, int Size) {
   int i = 0;
   int EncSize = 0;
 
@@ -70,12 +72,12 @@ public final class MuEncoder {
    if (i + 8 < Size) {
     short[] Decrypted = new short[8];
     System.arraycopy(contents, i, Decrypted, 0, 8);
-    encodeBlock(Encrypted, Decrypted, 8, MuKeyFactory.getServerToClientPacketEncKeys());
+    BlockEncode(Encrypted, Decrypted, 8, MuKeyFactory.getServerToClientPacketEncKeys());
    } else {
     short[] Decrypted = new short[Size - i];
     System.arraycopy(contents, i, Decrypted, 0, Decrypted.length);
 
-    encodeBlock(Encrypted, Decrypted, (Size - i), MuKeyFactory.getServerToClientPacketEncKeys());
+    BlockEncode(Encrypted, Decrypted, (Size - i), MuKeyFactory.getServerToClientPacketEncKeys());
    }
 
    out.writerIndex(header + EncSize);
@@ -90,7 +92,7 @@ public final class MuEncoder {
   return EncSize;
  }
 
- private static void encodeBlock(short[] OutBuf, short[] InBuf, int Size, long[] Keys) {
+ private static void BlockEncode(short[] OutBuf, short[] InBuf, int Size, long[] Keys) {
   short[] Finale = new short[2];
   Finale[0] = (short) Size;
   Finale[0] ^= 0x3D;
@@ -101,7 +103,7 @@ public final class MuEncoder {
 
   Finale[0] ^= Finale[1];
 
-  shiftBytes(OutBuf, 0x48, Finale, 0x00, 0x10);
+  ShiftBytes(OutBuf, 0x48, Finale, 0x00, 0x10);
 
   //System.err.println("Encode block: ------------------ Size: "+Size);
   //System.err.println(PrintData.printData(InBuf));
@@ -133,23 +135,23 @@ public final class MuEncoder {
   // 4B 1D 00 00 - after block copy must achive this
   //Buffer.BlockCopy(Ring, 0, Shift, 0, 4);
   copyRingArray(Ring[0], Shift);
-  shiftBytes(OutBuf, 0x00, Shift, 0x00, 0x10);
-  shiftBytes(OutBuf, 0x10, Shift, 0x16, 0x02);
+  ShiftBytes(OutBuf, 0x00, Shift, 0x00, 0x10);
+  ShiftBytes(OutBuf, 0x10, Shift, 0x16, 0x02);
 
   //Buffer.BlockCopy(Ring, 4, Shift, 0, 4);
   copyRingArray(Ring[1], Shift);
-  shiftBytes(OutBuf, 0x12, Shift, 0x00, 0x10);
-  shiftBytes(OutBuf, 0x22, Shift, 0x16, 0x02);
+  ShiftBytes(OutBuf, 0x12, Shift, 0x00, 0x10);
+  ShiftBytes(OutBuf, 0x22, Shift, 0x16, 0x02);
 
   //Buffer.BlockCopy(Ring, 8, Shift, 0, 4);
   copyRingArray(Ring[2], Shift);
-  shiftBytes(OutBuf, 0x24, Shift, 0x00, 0x10);
-  shiftBytes(OutBuf, 0x34, Shift, 0x16, 0x02);
+  ShiftBytes(OutBuf, 0x24, Shift, 0x00, 0x10);
+  ShiftBytes(OutBuf, 0x34, Shift, 0x16, 0x02);
 
   //Buffer.BlockCopy(Ring, 12, Shift, 0, 4);
   copyRingArray(Ring[3], Shift);
-  shiftBytes(OutBuf, 0x36, Shift, 0x00, 0x10);
-  shiftBytes(OutBuf, 0x46, Shift, 0x16, 0x02);
+  ShiftBytes(OutBuf, 0x36, Shift, 0x00, 0x10);
+  ShiftBytes(OutBuf, 0x46, Shift, 0x16, 0x02);
  }
 
  private static void copyRingArray(long ring, short[] shift) {
@@ -169,7 +171,7 @@ public final class MuEncoder {
   return result;
  }
 
- private static long shiftBytes(short[] OutBuf, long Arg_4, short[] InBuf, long Arg_C, long Arg_10) {
+ private static long ShiftBytes(short[] OutBuf, long Arg_4, short[] InBuf, long Arg_C, long Arg_10) {
   long Size = ((((Arg_10 + Arg_C) - 1) / 8) + (1 - (Arg_C / 8)));
   short[] Tmp = new short[20];
   System.arraycopy(InBuf, (int) (Arg_C / 8), Tmp, 0, (int) Size);
@@ -180,8 +182,8 @@ public final class MuEncoder {
 
   Arg_C &= 0x7;
 
-  shiftRight(Tmp, (int) Size, (int) Arg_C);
-  shiftLeft(Tmp, (int) Size + 1, (int) (Arg_4 & 0x7));
+  ShiftRight(Tmp, (int) Size, (int) Arg_C);
+  ShiftLeft(Tmp, (int) Size + 1, (int) (Arg_4 & 0x7));
 
   if ((Arg_4 & 0x7) > Arg_C) ++Size;
   if (Size != 0)
@@ -191,7 +193,7 @@ public final class MuEncoder {
   return Arg_10 + Arg_4;
  }
 
- private static void shiftLeft(short[] Data, int Size, int Shift) {
+ private static void ShiftLeft(short[] Data, int Size, int Shift) {
   if (Shift == 0) return;
   for (int i = 1; i < Size; i++)
    Data[Size - i] = (byte) ((Data[Size - i] >> Shift) | ((Data[Size - i - 1]) << (8 - Shift)));
@@ -199,7 +201,7 @@ public final class MuEncoder {
   Data[0] = (short) ((byte) (Data[0] >> Shift) & 0xFF);
  }
 
- private static void shiftRight(short[] Data, int Size, int Shift) {
+ private static void ShiftRight(short[] Data, int Size, int Shift) {
   if (Shift == 0) return;
   for (int i = 1; i < Size; i++)
    Data[i - 1] = (byte) ((Data[i - 1] << Shift) | (Data[i] >> (8 - Shift)));
@@ -207,19 +209,23 @@ public final class MuEncoder {
   Data[Size - 1] = (short) ((byte) (Data[Size - 1] << Shift) & 0xFF);
  }
 
- public static void main(String[] args) throws Exception {
-  MuKeyFactory.parse(System.getProperty("user.dir"));
 
+ public static void main(String[] args) throws Exception {
+  MuKeyFactory.parse();
+
+  //byte[] data = PacketUtils.hex2Bytes("C3 44 F3 03 42 E6 33 00 00 00 00 00 00 00 FA 00 00 00 00 00 00 01 25 84 0A 00 2D 00 32 00 12 00 28 00 56 00 56 00 59 00 59 00 C8 00 C8 00 10 00 20 00 12 00 B0 B4 1D 00 03 00 00 00 04 00 00 00 00 00 04 00");
   byte[] data = PacketUtils.hex2Bytes("C4 00 2D 01 F3 10 03 00 00 00 12 00 00 10 00 FF FF FF FF FF 0C 14 08 1E 00 00 D0 00 FF FF FF FF FF 0D 14 10 1E 00 00 D0 00 FF FF FF FF");
   ByteBuf buff = Unpooled.buffer().order(ByteOrder.LITTLE_ENDIAN);
   buff.writeBytes(data);
 
-  ByteBuf out = encodePacket(buff, 0x02);
+  ByteBuf out = EncodePacket(buff, 0x02);
 
   byte[] arr = new byte[out.readableBytes()];
   out.readBytes(arr);
 
+  //System.out.println(PrintData.printData(out.nioBuffer()));
+  //System.out.println("C3-65-22-EF-31-62-4B-D5-32-2F-B1-AA-9F-45-1B-08-45-D2-96-92-B1-51-37-02-45-1B-1F-83-13-D1-F3-9C-E6-67-52-9C-F7-0F-7C-CD-9B-E1-EC-B4-E8-DD-3D-33-0D-44-C2-73-52-48-4E-CD-F8-98-77-44-8B-99-FA-64-71-A6-FD-C8-35-92-35-B9-95-3D-A2-3C-81-C5-F0-0F-4E-1D-F0-81-34-72-2B-E8-C9-FC-36-05-31-36-80-D0-80-BB-0C-C2-FC");
   System.out.println("C3-0D-FE-53-65-66-18-AB-51-01-C1-4D-77");
-  System.out.println(PacketUtils.bytesToHex(arr).toUpperCase());
+  System.out.println(PacketUtils.byteArrayToHex(arr).toUpperCase());
  }
 }

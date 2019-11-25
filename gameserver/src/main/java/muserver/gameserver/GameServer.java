@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class GameServer extends BaseServer {
-
  public GameServer(BaseChannelInitializer initializer) {
   super(initializer);
  }
@@ -35,21 +34,23 @@ public class GameServer extends BaseServer {
    throw new FileNotFoundException(String.format("File with the specified pathname %s does not exist", args[0]));
   }
 
+  MuKeyFactory.parse();
+
   byte[] bytes = Files.readAllBytes(Paths.get(args[0]));
 
   try (InputStream stream = new ByteArrayInputStream(bytes)) {
    String json = IOUtils.toString(stream, Charset.defaultCharset());
-   GameServerConfigs configs = Globals.getObjectMapper().readValue(json, GameServerConfigs.class);
 
-   MuKeyFactory.parse(String.format("%s/gameserver", System.getProperty("user.dir")));
+   GameServerConfigs configs = Globals.getObjectMapper().readValue(json, GameServerConfigs.class);
 
    gameServer = new GameServer(new GameServerChannelInitializer(configs));
 
    gameServer.start();
+
    Thread.sleep(Long.MAX_VALUE);
   } finally {
    if (gameServer != null) {
-    gameServer.shutdown();
+    gameServer.shutdownGracefully();
    }
   }
  }

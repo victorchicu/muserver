@@ -6,10 +6,10 @@ import io.netty.channel.ChannelHandlerContext;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.ConnectServerConfigs;
 
-public class SendServerConnectHandler extends BasePacketHandler {
+public class ServerConnectHandler extends BasePacketHandler {
     private final ConnectServerConfigs configs;
 
-    public SendServerConnectHandler(ConnectServerConfigs configs) {
+    public ServerConnectHandler(ConnectServerConfigs configs) {
         this.configs = configs;
     }
 

@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 
 public class MuCryptUtils {
 
-	private static final byte[] xor3Bytes = {(byte) 0xFC, (byte) 0xCF, (byte) 0xAB};
-
 	static int GetDecodedSize(ByteBuf buff) {
 		switch (buff.getUnsignedByte(0)) {
 			case 0xC1:
@@ -134,7 +132,9 @@ public class MuCryptUtils {
 		}
 	}
 
-	public static void dec3bit(byte[] array, int start, int len) {
+	private static final byte[] xor3Bytes = {(byte) 0xFC, (byte) 0xCF, (byte) 0xAB};
+
+	public static void Dec3bit(byte[] array, int start, int len) {
 		for (int i = start; i < start + len; i++) {
 			array[i] = (byte) (array[i] ^ xor3Bytes[(i - start) % 3]);
 		}
@@ -150,5 +150,14 @@ public class MuCryptUtils {
 		}
 
 		return data;
+	}
+
+	public static String toString(byte[] data) {
+		String res = "";
+		for (int i = 0; i < data.length; i++) {
+			res += PrintData.fillHex(data[i] & 0xff, 2);
+		}
+
+		return res;
 	}
 }

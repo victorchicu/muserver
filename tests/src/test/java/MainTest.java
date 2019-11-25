@@ -2,6 +2,7 @@ import com.google.common.collect.ImmutableMap;
 import muserver.common.BaseServer;
 import muserver.common.objects.ConnectServerConfigs;
 import muserver.common.objects.GameServerConfigs;
+import muserver.common.utils.MuKeyFactory;
 import muserver.connectserver.ConnectServer;
 import muserver.connectserver.channels.ConnectServerChannelInitializer;
 import muserver.gameserver.GameServer;
@@ -15,7 +16,9 @@ import java.util.List;
 public class MainTest {
  private final static Logger logger = LogManager.getLogger(MainTest.class);
 
- public static void main(String... args) {
+ public static void main(String... args) throws Exception {
+  MuKeyFactory.parse();
+
   List<BaseServer> servers = Arrays.asList(
     new ConnectServer(
       new ConnectServerChannelInitializer(ConnectServerConfigs.create(44405, ImmutableMap.of(
@@ -23,7 +26,7 @@ public class MainTest {
       )))
     ),
     new GameServer(
-      new GameServerChannelInitializer(GameServerConfigs.create("GS-1", 55901, "1.04.05"))
+      new GameServerChannelInitializer(GameServerConfigs.create("GS-1", 55901, "10405"))
     )
   );
   try {
@@ -32,7 +35,7 @@ public class MainTest {
   } catch (Exception e) {
    logger.fatal(e.getMessage(), e);
   } finally {
-   servers.forEach(BaseServer::shutdown);
+   servers.forEach(BaseServer::shutdownGracefully);
   }
  }
 }

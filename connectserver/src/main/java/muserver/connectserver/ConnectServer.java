@@ -37,13 +37,16 @@ public class ConnectServer extends BaseServer {
 
   try (InputStream stream = new ByteArrayInputStream(bytes)) {
    String json = IOUtils.toString(stream, Charset.defaultCharset());
+
    ConnectServerConfigs configs = Globals.getObjectMapper().readValue(json, ConnectServerConfigs.class);
+
    connectServer = new ConnectServer(new ConnectServerChannelInitializer(configs));
    connectServer.start();
+
    Thread.sleep(Long.MAX_VALUE);
   } finally {
    if (connectServer != null) {
-    connectServer.shutdown();
+    connectServer.shutdownGracefully();
    }
   }
  }

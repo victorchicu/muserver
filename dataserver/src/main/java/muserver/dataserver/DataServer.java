@@ -25,7 +25,7 @@ public class DataServer extends BaseServer {
    logger.fatal(e.getMessage(), e);
   } finally {
    if (dataServer != null) {
-    dataServer.shutdown();
+    dataServer.shutdownGracefully();
    }
   }
  }

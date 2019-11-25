@@ -10,7 +10,7 @@ public abstract class BasePacketHandler {
  private static final Logger logger = LogManager.getLogger(BasePacketHandler.class);
 
  public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-  logger.info("\n{}", ByteBufUtil.prettyHexDump(byteBuf));
+  logger.info("SENT PACKET\n{}", ByteBufUtil.prettyHexDump(byteBuf));
   ctx.writeAndFlush(byteBuf);
  }
 }

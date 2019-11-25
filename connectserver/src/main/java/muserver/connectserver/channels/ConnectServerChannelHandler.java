@@ -9,9 +9,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.Globals;
 import muserver.common.objects.ConnectServerConfigs;
-import muserver.connectserver.handlers.SendAcceptClientHandler;
-import muserver.connectserver.handlers.SendServerConnectHandler;
-import muserver.connectserver.handlers.SendServerListHandler;
+import muserver.connectserver.handlers.AcceptClientHandler;
+import muserver.connectserver.handlers.ServerConnectHandler;
+import muserver.connectserver.handlers.ServerListHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,10 +22,10 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
  private final Map<Integer, BasePacketHandler> packets;
 
- ConnectServerChannelHandler(ConnectServerConfigs connectServerConfigs) {
+ ConnectServerChannelHandler(ConnectServerConfigs configs) {
   packets = ImmutableMap.of(
-   0xF403, new SendServerConnectHandler(connectServerConfigs),
-   0xF406, new SendServerListHandler(connectServerConfigs)
+    0xF403, new ServerConnectHandler(configs),
+    0xF406, new ServerListHandler(configs)
   );
  }
 
@@ -34,7 +34,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
   if (ctx.channel().remoteAddress() != null) {
    logger.info("Accepted a client connection from remote address: {}", ctx.channel().remoteAddress().toString());
   }
-  new SendAcceptClientHandler().send(ctx, Unpooled.directBuffer(4));
+  new AcceptClientHandler().send(ctx, Unpooled.directBuffer(4));
  }
 
  @Override
@@ -57,14 +57,14 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
 
  @Override
  protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-  logger.info("\n{}", ByteBufUtil.prettyHexDump(byteBuf));
+  logger.info("RECEIVED PACKET\n{}", ByteBufUtil.prettyHexDump(byteBuf));
 
-  short type = byteBuf.getUnsignedByte(0);
+  short type = byteBuf.readUnsignedByte();
 
   switch (type) {
    case 0xC1:
    case 0xC3: {
-    short size = byteBuf.getUnsignedByte(1);
+    short size = byteBuf.readUnsignedByte();
     if (size <= 0 || size > Globals.getUnsignedByteMaxValue()) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
@@ -76,7 +76,7 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    break;
    case 0xC2:
    case 0xC4: {
-    int size = byteBuf.getUnsignedShort(1);
+    int size = byteBuf.readUnsignedShort();
     if (size <= 0 || size > Globals.getUnsignedShortMaxValue()) {
      ctx.close();
      if (ctx.channel().remoteAddress() != null) {
@@ -95,14 +95,14 @@ public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<Byt
    }
   }
 
-  int protoNum = byteBuf.readerIndex(2).readUnsignedShort();
+  int opCode = byteBuf.readUnsignedShort();
 
-  BasePacketHandler packetHandler = packets.get(protoNum);
+  BasePacketHandler packetHandler = packets.get(opCode);
 
   if (packetHandler == null) {
    ctx.close();
    if (ctx.channel().remoteAddress() != null) {
-    logger.warn("Invalid protocol number: {} | from remote address: {}", protoNum, ctx.channel().remoteAddress().toString());
+    logger.warn("Invalid protocol number: {} | from remote address: {}", opCode, ctx.channel().remoteAddress().toString());
    }
    return;
   }
