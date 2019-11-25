@@ -12,13 +12,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class JoinIdPassRequestHandler extends BasePacketHandler {
  private static final Logger logger = LogManager.getLogger(JoinIdPassRequestHandler.class);
- private static final AtomicInteger joinResult = new AtomicInteger(60);
+
  private final GameServerConfigs configs;
 
  public JoinIdPassRequestHandler(GameServerConfigs configs) {

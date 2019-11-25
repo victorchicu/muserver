@@ -10,6 +10,7 @@ import muserver.common.Globals;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.GameServerConfigs;
 import muserver.common.utils.MuDecoder;
+import muserver.gameserver.handlers.DataServerGetCharListRequestHandler;
 import muserver.gameserver.handlers.JoinIdPassRequestHandler;
 import muserver.gameserver.handlers.LiveClientHandler;
 import muserver.gameserver.handlers.AcceptClientHandler;
@@ -27,7 +28,8 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
  GameServerChannelHandler(GameServerConfigs configs) {
   packets = ImmutableMap.of(
     0x0E00, new LiveClientHandler(configs),
-    0xF101, new JoinIdPassRequestHandler(configs)
+    0xF101, new JoinIdPassRequestHandler(configs),
+    0xF300, new DataServerGetCharListRequestHandler(configs)
   );
   this.configs = configs;
  }
@@ -76,6 +78,10 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
 
     logger.info("RECEIVED PACKET\n{}", ByteBufUtil.prettyHexDump(byteBuf));
 
+    ByteBuf decodedBuff = MuDecoder.DecodeXor32(byteBuf);
+
+    logger.info("DECODED PACKET\n{}", ByteBufUtil.prettyHexDump(decodedBuff));
+
     int opCode = byteBuf.getUnsignedShort(2);
 
     BasePacketHandler packetHandler = packets.get(opCode);
@@ -98,6 +104,10 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
     }
 
     logger.info("RECEIVED PACKET\n{}", ByteBufUtil.prettyHexDump(byteBuf));
+
+    ByteBuf decodedBuff = MuDecoder.DecodeXor32(byteBuf);
+
+    logger.info("DECODED PACKET\n{}", ByteBufUtil.prettyHexDump(decodedBuff));
 
     int opCode = byteBuf.getUnsignedShort(3);
 
