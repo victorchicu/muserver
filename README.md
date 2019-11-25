@@ -1,13 +1,13 @@
-Programm edits ServerList.bmd. It has ability of changing server types(Gold,PVP,Non-PVP,Normal). Numbers in table from 1 to 15 is server indexes, you can type there these numbers : 
-3 - Gold
-2 - Gold Pvp
-1 - Non-PVP
-0 - Normal
-Old versions of ServerList.bmd also had Description of server, so I decided to leave it as it is, so you can also edit older's version of this files.
+## Connect server
 
-0-19 1st main server
-20-39 2nd main server
-40-59 3rd main server
-etc
-etc
-etc 
+| Headercode | Subcode | Progress |
+| ---------- | ------- | -------- |
+| 0xF4       | 0x03    | DONE     |
+|            | 0x06    | DONE     |
+
+## Game server
+
+| Headercode | Subcode | Progress |
+| ---------- | ------- | -------- |
+| 0x0E       | 0x00    | WIP(50%) |
+| 0xF1       | 0x01    | WIP(50%) |
