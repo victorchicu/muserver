@@ -1,22 +1,17 @@
 
 .idea/
 
-join-server/target/
-
-game-server/target/
-
-database-dialect/target/
-
 common/target/
-
-connect-server/target/
-
-integration-tests/target/
-
-data-server/target/
+common/common.iml
 
 connectserver/target/
+connectserver/connectserver.iml
 
 dataserver/target/
+dataserver/dataserver.iml
 
 gameserver/target/
+gameserver/gameserer.iml
+
+tests/target
+tests/tests.iml
