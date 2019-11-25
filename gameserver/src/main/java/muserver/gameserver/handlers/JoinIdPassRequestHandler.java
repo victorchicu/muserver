@@ -11,10 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JoinIdPassRequestHandler extends BasePacketHandler {
- private final GameServerConfigs gameServerConfigs;
+ private final GameServerConfigs configs;
 
- public JoinIdPassRequestHandler(GameServerConfigs gameServerConfigs) {
-  this.gameServerConfigs = gameServerConfigs;
+ public JoinIdPassRequestHandler(GameServerConfigs configs) {
+  this.configs = configs;
  }
 
  @Override
