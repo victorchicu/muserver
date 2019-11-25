@@ -1,16 +1,24 @@
 package muserver.gameserver.handlers;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.GameServerConfigs;
+import muserver.common.results.JoinResult;
 import muserver.common.utils.MuCryptUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class JoinIdPassRequestHandler extends BasePacketHandler {
+ private static final Logger logger = LogManager.getLogger(JoinIdPassRequestHandler.class);
+ private static final AtomicInteger joinResult = new AtomicInteger(60);
  private final GameServerConfigs configs;
 
  public JoinIdPassRequestHandler(GameServerConfigs configs) {
@@ -33,9 +41,9 @@ public class JoinIdPassRequestHandler extends BasePacketHandler {
   MuCryptUtils.Dec3bit(passBytes, 0, 20);
   String passString = new String(passBytes, utf8).trim();
 
+  //Number of milliseconds elapsed since the client started.
   long tickCount = byteBuf.readUnsignedInt();
-
-  Date date = new Date(tickCount);
+  logger.info("Tick count: {}", new Date(tickCount));
 
   byte[] cliVersionBytes = new byte[5];
   byteBuf.readBytes(cliVersionBytes, 0, 5);
@@ -45,12 +53,32 @@ public class JoinIdPassRequestHandler extends BasePacketHandler {
   byteBuf.readBytes(cliSerialBytes, 0, 16);
   String cliSerial = new String(cliSerialBytes, utf8).trim();
 
-//  PMSG_RESULT pResult; // [sp+4Ch] [bp-8h]@1
-//
-//  PHeadSubSetB(&pResult.h.c, 0xF1, 1, 5);
-//  pResult.result = result;
-//  DataSend(aIndex, &pResult.h.c, (unsigned __int8)pResult.h.size);
+  if (!cliVersion.equalsIgnoreCase(configs.version())) {
+   logger.warn("Invalid client version: {}", cliVersion);
+   sendJoinResult(ctx, JoinResult.YOUR_ACCOUNT_IS_INVALID);
+   ctx.close();
+   return;
+  }
 
-  super.send(ctx, byteBuf);
+  if (!cliSerial.equalsIgnoreCase(configs.serial())) {
+   logger.warn("Invalid client serial: {}", cliSerial);
+   sendJoinResult(ctx, JoinResult.NEW_VERSION_OF_GAME_IS_REQUIRED);
+   ctx.close();
+   return;
+  }
+
+  //todo: Validate account
+
+  sendJoinResult(ctx, JoinResult.LOGIN_SUCCEED);
+ }
+
+ private void sendJoinResult(ChannelHandlerContext ctx, JoinResult result) {
+  ByteBuf buffer = Unpooled.buffer(5);
+  buffer.writeByte(0xC1);
+  buffer.writeByte(0x05);
+  buffer.writeByte(0xF1);
+  buffer.writeByte(0x01);
+  buffer.writeByte(result.type());
+  super.send(ctx, buffer);
  }
 }

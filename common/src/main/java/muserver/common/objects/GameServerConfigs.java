@@ -19,15 +19,21 @@ public abstract class GameServerConfigs extends CommonConfigs {
  @JsonProperty("version")
  public abstract String version();
 
+ @JsonProperty("serial")
+ public abstract String serial();
+
  @JsonCreator
  public static GameServerConfigs create(
    @JsonProperty("name") String name,
    @JsonProperty("port") Integer port,
-   @JsonProperty("version") String version) {
+   @JsonProperty("version") String version,
+   @JsonProperty("serial") String serial
+ ) {
   return builder()
     .name(name)
     .port(port)
     .version(version)
+    .serial(serial)
     .build();
  }
 
@@ -38,6 +44,8 @@ public abstract class GameServerConfigs extends CommonConfigs {
   public abstract Builder version(String version);
 
   public abstract Builder name(String name);
+
+  public abstract Builder serial(String serial);
 
   public abstract GameServerConfigs build();
  }

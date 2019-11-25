@@ -6,7 +6,7 @@
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>connectserver</artifactId>
+  <artifactId>connect-server</artifactId>
   <build>
     <plugins>
       <plugin>

@@ -26,7 +26,7 @@ public class MainTest {
       )))
     ),
     new GameServer(
-      new GameServerChannelInitializer(GameServerConfigs.create("GS-1", 55901, "10405"))
+      new GameServerChannelInitializer(GameServerConfigs.create("GS-1", 55901, "10405", "TbYehR2hFUPBKgZj"))
     )
   );
   try {
