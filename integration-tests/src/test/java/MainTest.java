@@ -30,7 +30,7 @@ public class MainTest {
     )
   );
   try {
-   servers.forEach(BaseServer::start);
+   servers.forEach(baseServer -> baseServer.start(55));
    Thread.sleep(Long.MAX_VALUE);
   } catch (Exception e) {
    logger.fatal(e.getMessage(), e);

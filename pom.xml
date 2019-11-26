@@ -5,7 +5,7 @@
  <modelVersion>4.0.0</modelVersion>
 
  <groupId>muserver</groupId>
- <artifactId>muserver</artifactId>
+ <artifactId>root</artifactId>
  <packaging>pom</packaging>
  <version>1.0</version>
 

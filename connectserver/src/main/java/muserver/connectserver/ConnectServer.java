@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 
 public class ConnectServer extends BaseServer {
  public ConnectServer(BaseChannelInitializer initializer) {
-  super(initializer);
+  super();
  }
 
  public static void main(String[] args) throws Exception {
@@ -41,7 +41,7 @@ public class ConnectServer extends BaseServer {
    ConnectServerConfigs configs = Globals.getObjectMapper().readValue(json, ConnectServerConfigs.class);
 
    connectServer = new ConnectServer(new ConnectServerChannelInitializer(configs));
-   connectServer.start();
+   connectServer.start(4440,null);
 
    Thread.sleep(Long.MAX_VALUE);
   } finally {

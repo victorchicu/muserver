@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 
 public class GameServer extends BaseServer {
  public GameServer(BaseChannelInitializer initializer) {
-  super(initializer);
+  super();
  }
 
  public static void main(String[] args) throws Exception {
@@ -45,7 +45,7 @@ public class GameServer extends BaseServer {
 
    gameServer = new GameServer(new GameServerChannelInitializer(configs));
 
-   gameServer.start();
+   gameServer.start(55901);
 
    Thread.sleep(Long.MAX_VALUE);
   } finally {
