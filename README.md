@@ -7,6 +7,12 @@
 | ServerConnect       | 0xF4       | 0x03    | DONE     |
 | ServerList          |            | 0x06    | DONE     |
 
+## Data server
+
+| Protocol name                | Headcode   | Subcode | Progress |
+| ---------------------------- | ---------- | ------- | -------- |
+| GJPCharacterListRequestCS    | 0x00       |         | WIP(0%)  |
+
 ## Game server
 
 | Protocol name                | Headcode   | Subcode | Progress |
