@@ -1,4 +1,4 @@
-package muserver.common.results;
+package muserver.common.enums;
 
 public enum JoinResult {
  PASSWORD_IS_INCORRECT((byte) 0),

@@ -5,7 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.common.handlers.BasePacketHandler;
 import muserver.common.objects.GameServerConfigs;
-import muserver.common.results.JoinResult;
+import muserver.common.enums.JoinResult;
 import muserver.common.utils.MuCryptUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
