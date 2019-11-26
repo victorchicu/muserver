@@ -2,18 +2,18 @@ package muserver.gameserver.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.handlers.BasePacketHandler;
-import muserver.common.objects.GameServerConfigs;
+import muserver.baseserver.BasePacketHandler;
+import muserver.gameserver.configs.GameServerProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DataServerGetCharListRequestHandler extends BasePacketHandler {
  private static final Logger logger = LogManager.getLogger(DataServerGetCharListRequestHandler.class);
 
- private final GameServerConfigs configs;
+ private final GameServerProperties props;
 
- public DataServerGetCharListRequestHandler(GameServerConfigs configs) {
-  this.configs = configs;
+ public DataServerGetCharListRequestHandler(GameServerProperties props) {
+  this.props = props;
  }
 
  @Override

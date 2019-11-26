@@ -1,34 +1,33 @@
 package muserver.connectserver.handlers;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.handlers.BasePacketHandler;
-import muserver.common.objects.ConnectServerConfigs;
+import muserver.connectserver.configs.ConnectServerProperties;
+import muserver.baseserver.BasePacketHandler;
 
 public class ServerListHandler extends BasePacketHandler {
-    private final ConnectServerConfigs configs;
+    private final ConnectServerProperties props;
 
-    public ServerListHandler(ConnectServerConfigs configs) {
-        this.configs = configs;
+    public ServerListHandler(ConnectServerProperties props) {
+        this.props = props;
     }
 
     @Override
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-        int size = (7 + (configs.servers().size() * 4));
+//        int size = (7 + (props.servers().size() * 4));
 
-        ByteBuf directBuffer = Unpooled.directBuffer(size);
+//        ByteBuf directBuffer = Unpooled.directBuffer(size);
 
-        directBuffer.writeByte(0xC2);
-        directBuffer.writeShort(size);
-        directBuffer.writeByte(0xF4);
-        directBuffer.writeByte(0x06);
-        directBuffer.writeShort(configs.servers().size());
+//        directBuffer.writeByte(0xC2);
+//        directBuffer.writeShort(size);
+//        directBuffer.writeByte(0xF4);
+//        directBuffer.writeByte(0x06);
+//        directBuffer.writeShort(props.servers().size());
 
-        for (Integer key : configs.servers().keySet()) {
-            directBuffer.writeByte(key).writeByte(65 / 100 * 100).writeByte(50).writeByte(0xCC);
-        }
+//        for (Integer key : props.servers().keySet()) {
+//            directBuffer.writeByte(key).writeByte(65 / 100 * 100).writeByte(50).writeByte(0xCC);
+//        }
 
-        super.send(ctx, directBuffer);
+//        super.send(ctx, directBuffer);
     }
 }

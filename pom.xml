@@ -7,25 +7,13 @@
  <groupId>muserver</groupId>
  <artifactId>root</artifactId>
  <packaging>pom</packaging>
- <version>1.0</version>
-
- <properties>
-  <io.netty.version>4.1.36.Final</io.netty.version>
-  <commons-io.version>2.6</commons-io.version>
-  <com.google.auto.value.vesion>1.6.2</com.google.auto.value.vesion>
-  <com.google.collections.version>1.0</com.google.collections.version>
-  <org.apache.logging.log4j.version>2.11.2</org.apache.logging.log4j.version>
-  <com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>
-  <com.ryanharter.auto.value.version>0.8.0</com.ryanharter.auto.value.version>
-  <com.fasterxml.jackson.core.version>2.10.1</com.fasterxml.jackson.core.version>
- </properties>
+ <version>0.0.1</version>
 
  <modules>
-  <module>common</module>
+  <module>baseserver</module>
   <module>connectserver</module>
   <module>dataserver</module>
   <module>gameserver</module>
-  <module>integration-tests</module>
  </modules>
 
  <build>
@@ -42,13 +30,4 @@
    </plugins>
   </pluginManagement>
  </build>
-
- <dependencies>
-  <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-  <dependency>
-   <groupId>org.apache.logging.log4j</groupId>
-   <artifactId>log4j-core</artifactId>
-   <version>${org.apache.logging.log4j.version}</version>
-  </dependency>
- </dependencies>
 </project>

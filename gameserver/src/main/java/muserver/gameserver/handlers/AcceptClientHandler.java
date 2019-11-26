@@ -2,17 +2,14 @@ package muserver.gameserver.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.common.handlers.BasePacketHandler;
-import muserver.common.objects.GameServerConfigs;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import muserver.baseserver.BasePacketHandler;
+import muserver.gameserver.configs.GameServerProperties;
 
 public class AcceptClientHandler extends BasePacketHandler {
- private final GameServerConfigs gameServerConfigs;
+ private final GameServerProperties props;
 
- public AcceptClientHandler(GameServerConfigs gameServerConfigs) {
-  this.gameServerConfigs = gameServerConfigs;
+ public AcceptClientHandler(GameServerProperties props) {
+  this.props = props;
  }
 
  @Override
@@ -25,7 +22,7 @@ public class AcceptClientHandler extends BasePacketHandler {
   byteBuf.writeByte(0x00);
   byteBuf.writeByte(0x01);
   byteBuf.writeShort(9000);
-  byteBuf.writeBytes(gameServerConfigs.version().getBytes());
+//  byteBuf.writeBytes(props.version().getBytes());
 
   super.send(ctx, byteBuf);
  }
