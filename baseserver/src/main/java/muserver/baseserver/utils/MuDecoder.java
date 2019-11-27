@@ -20,13 +20,13 @@ import io.netty.buffer.*;
 
 import java.nio.ByteOrder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 import static muserver.baseserver.utils.MuCryptUtils.*;
 
 public final class MuDecoder {
-	private static final Logger log = LogManager.getLogger(MuDecoder.class);
+//	private static final Logger log = LogManager.getLogger(MuDecoder.class);
 
 	private static ByteBufAllocator alloc = PooledByteBufAllocator.DEFAULT;
 
@@ -40,7 +40,7 @@ public final class MuDecoder {
 	public static ByteBuf DecodeXor32(ByteBuf buff) {
 
 		if (buff.readerIndex() != 0) {
-			log.warn("Buffer must be at index 0!");
+//			log.warn("Buffer must be at index 0!");
 			buff.readerIndex(0);
 		}
 
@@ -55,11 +55,11 @@ public final class MuDecoder {
 
 	public static ByteBuf DecodePacket(ByteBuf buff) {
 		if (buff.writerIndex() <= 2) {
-			log.fatal("Ambiguous buffer! " + ByteBufUtil.hexDump(buff));
+//			log.fatal("Ambiguous buffer! " + ByteBufUtil.hexDump(buff));
 			return null;
 		}
 		if (buff.readerIndex() != 0) {
-			log.warn("Buffer must be at index 0!");
+//			log.warn("Buffer must be at index 0!");
 			buff.readerIndex(0);
 		}
 
@@ -108,8 +108,8 @@ public final class MuDecoder {
 		int index = 0;
 
 		if ((size % 11) != 0) {
-			log.warn("Cannot decrypt packet, it's already decrypted!: Size " + size + " = " + ((size % 11)));
-			log.warn(PrintData.printData(buff.nioBuffer()));
+//			log.warn("Cannot decrypt packet, it's already decrypted!: Size " + size + " = " + ((size % 11)));
+//			log.warn(PrintData.printData(buff.nioBuffer()));
 			return -1;
 		}
 

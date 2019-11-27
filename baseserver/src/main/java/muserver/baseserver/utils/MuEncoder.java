@@ -6,11 +6,11 @@ import io.netty.buffer.*;
 
 import java.nio.ByteOrder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 public final class MuEncoder {
- private static final Logger log = LogManager.getLogger(MuEncoder.class);
+// private static final Logger log = LogManager.getLogger(MuEncoder.class);
 
  private static ByteBufAllocator alloc = PooledByteBufAllocator.DEFAULT;
 

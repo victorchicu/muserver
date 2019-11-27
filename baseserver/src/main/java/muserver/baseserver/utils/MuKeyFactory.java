@@ -26,11 +26,11 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 public class MuKeyFactory {
-	private static final Logger log = LogManager.getLogger(MuKeyFactory.class);
+//	private static final Logger log = LogManager.getLogger(MuKeyFactory.class);
 
 	private static long[] xor_tab_datfile = new long[]{0x3F08A79B, 0xE25CC287, 0x93D27AB9, 0x20DEA7BF};
 
@@ -40,7 +40,7 @@ public class MuKeyFactory {
 	private static long[] serverToClientPacketDecKeys;
 
 	public static void parse() throws IOException {
-		log.info("Parsing Mu Cypher Keys.");
+//		log.info("Parsing Mu Cypher Keys.");
 	 String workDir =	System.getProperty("user.dir");
 		readFile(String.format("%s/gameserver/Enc2.dat", workDir), serverToClientPacketEncKeys);
 		readFile(String.format("%s/gameserver/Dec1.dat", workDir), clientToServerPacketDecKeys);

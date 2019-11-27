@@ -49,8 +49,8 @@
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>common</artifactId>
-   <version>1.0</version>
+   <artifactId>baseserver</artifactId>
+   <version>${project.version}</version>
   </dependency>
  </dependencies>
 
