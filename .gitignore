@@ -1,4 +1,3 @@
-
 .idea/
 
 common/target/
@@ -15,3 +14,7 @@ gameserver/gameserer.iml
 
 tests/target
 tests/tests.iml
+
+/servers/connectserver/.mvn/
+/servers/dataserver/.mvn/
+/servers/gameserver/.mvn/
