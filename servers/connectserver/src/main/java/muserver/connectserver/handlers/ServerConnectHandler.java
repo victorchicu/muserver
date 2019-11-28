@@ -17,7 +17,7 @@ public class ServerConnectHandler extends BasePacketHandler {
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-//        ConnectServerConfigs.Server server = props.servers().get(serverCode);
+        ConnectServerProperties.Server server = props.getServers().get(serverCode);
 
         int size = 22;
 
@@ -30,10 +30,10 @@ public class ServerConnectHandler extends BasePacketHandler {
 
         int i = 0;
 
-//        for (byte val : server.ip().getBytes()) {
-//            directBuffer.writeByte(val);
-//            i++;
-//        }
+        for (byte val : server.getIp().getBytes()) {
+            directBuffer.writeByte(val);
+            i++;
+        }
 
         directBuffer.writeByte(0);
 
@@ -44,7 +44,7 @@ public class ServerConnectHandler extends BasePacketHandler {
             n--;
         }
 
-//        directBuffer.writeShortLE(server.port());
+        directBuffer.writeShortLE(server.getPort());
 
         super.send(ctx, directBuffer);
     }

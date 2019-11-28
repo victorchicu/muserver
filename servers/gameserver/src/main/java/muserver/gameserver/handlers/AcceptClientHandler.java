@@ -22,7 +22,7 @@ public class AcceptClientHandler extends BasePacketHandler {
   byteBuf.writeByte(0x00);
   byteBuf.writeByte(0x01);
   byteBuf.writeShort(9000);
-//  byteBuf.writeBytes(props.version().getBytes());
+  byteBuf.writeBytes(props.getVersion().getBytes());
 
   super.send(ctx, byteBuf);
  }

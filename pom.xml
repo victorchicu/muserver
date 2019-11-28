@@ -12,6 +12,7 @@
  <modules>
   <module>base</module>
   <module>servers</module>
+  <module>tests</module>
  </modules>
 
  <build>

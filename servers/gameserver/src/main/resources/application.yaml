@@ -1,10 +1,8 @@
 logging:
   level:
     ROOT: info
-#---
-#{
-#  "name": "GS-1",
-#  "port": 55901,
-#  "version": "10405",
-#  "serial": "TbYehR2hFUPBKgZj"
-#}
+gameserver:
+  name: "GS-1"
+  port: 55901
+  version: "10405"
+  serial: "TbYehR2hFUPBKgZj"

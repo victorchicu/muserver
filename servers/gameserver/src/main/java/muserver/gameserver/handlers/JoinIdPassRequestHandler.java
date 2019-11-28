@@ -10,7 +10,6 @@ import muserver.gameserver.configs.GameServerProperties;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 public class JoinIdPassRequestHandler extends BasePacketHandler {
  private final GameServerProperties props;
@@ -47,23 +46,23 @@ public class JoinIdPassRequestHandler extends BasePacketHandler {
   byteBuf.readBytes(cliSerialBytes, 0, 16);
   String cliSerial = new String(cliSerialBytes, utf8).trim();
 
-//  if (!cliVersion.equalsIgnoreCase(props.version())) {
+  if (!cliVersion.equalsIgnoreCase(props.getVersion())) {
 //   logger.warn("Invalid client version: {}", cliVersion);
-//   sendJoinResult(ctx, JoinResult.YOUR_ACCOUNT_IS_INVALID);
-//   ctx.close();
-//   return;
-//  }
+   sendJoinResult(ctx, JoinResult.YOUR_ACCOUNT_IS_INVALID);
+   ctx.close();
+   return;
+  }
 
-//  if (!cliSerial.equalsIgnoreCase(props.serial())) {
+  if (!cliSerial.equalsIgnoreCase(props.getSerial())) {
 //   logger.warn("Invalid client serial: {}", cliSerial);
-//   sendJoinResult(ctx, JoinResult.NEW_VERSION_OF_GAME_IS_REQUIRED);
-//   ctx.close();
-//   return;
-//  }
+   sendJoinResult(ctx, JoinResult.NEW_VERSION_OF_GAME_IS_REQUIRED);
+   ctx.close();
+   return;
+  }
 
   //todo: Validate account
 
-//  sendJoinResult(ctx, JoinResult.LOGIN_SUCCEED);
+  sendJoinResult(ctx, JoinResult.LOGIN_SUCCEED);
  }
 
  private void sendJoinResult(ChannelHandlerContext ctx, JoinResult result) {
