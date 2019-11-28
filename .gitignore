@@ -1,19 +1,16 @@
 .idea/
 
-common/target/
-common/common.iml
+/base/target/
+/base/base.iml
 
-connectserver/target/
-connectserver/connectserver.iml
+/servers/connectserver/target/
+/servers/connectserver/connectserver.iml
 
-dataserver/target/
-dataserver/dataserver.iml
+/servers/dataserver/target/
+/servers/dataserver/dataserver.iml
 
-gameserver/target/
-gameserver/gameserer.iml
-
-tests/target
-tests/tests.iml
+/servers/gameserver/target/
+/servers/gameserver/gameserer.iml
 
 /servers/connectserver/.mvn/
 /servers/dataserver/.mvn/
