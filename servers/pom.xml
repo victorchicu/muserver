@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
  <modelVersion>4.0.0</modelVersion>
 
  <parent>
@@ -10,12 +10,22 @@
  </parent>
 
  <groupId>muserver</groupId>
- <artifactId>connectserver</artifactId>
+ <artifactId>servers</artifactId>
+ <packaging>pom</packaging>
  <version>0.0.1</version>
 
  <properties>
   <java.version>1.8</java.version>
  </properties>
+
+ <build>
+  <plugins>
+   <plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+   </plugin>
+  </plugins>
+ </build>
 
  <dependencies>
   <dependency>
@@ -43,18 +53,14 @@
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>baseserver</artifactId>
-   <version>0.0.1</version>
+   <artifactId>base</artifactId>
+   <version>${project.version}</version>
   </dependency>
  </dependencies>
 
- <build>
-  <plugins>
-   <plugin>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-maven-plugin</artifactId>
-   </plugin>
-  </plugins>
- </build>
-
+ <modules>
+  <module>connectserver</module>
+  <module>dataserver</module>
+  <module>gameserver</module>
+ </modules>
 </project>

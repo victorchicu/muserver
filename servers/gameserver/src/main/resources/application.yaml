@@ -1,3 +1,7 @@
+logging:
+  level:
+    ROOT: info
+#---
 #{
 #  "name": "GS-1",
 #  "port": 55901,

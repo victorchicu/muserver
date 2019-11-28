@@ -10,10 +10,8 @@
  <version>0.0.1</version>
 
  <modules>
-  <module>baseserver</module>
-  <module>connectserver</module>
-  <module>dataserver</module>
-  <module>gameserver</module>
+  <module>base</module>
+  <module>servers</module>
  </modules>
 
  <build>

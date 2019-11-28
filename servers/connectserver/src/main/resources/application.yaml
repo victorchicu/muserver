@@ -1,3 +1,7 @@
+logging:
+  level:
+    ROOT: info
+#---
 #"servers": {
 #   "0": {
 #     "ip": "192.168.88.30",
