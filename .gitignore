@@ -3,17 +3,16 @@
 /base/target/
 /base/base.iml
 
+/servers/connectserver/.mvn/
 /servers/connectserver/target/
 /servers/connectserver/connectserver.iml
 
+/servers/dataserver/.mvn/
 /servers/dataserver/target/
 /servers/dataserver/dataserver.iml
 
+/servers/gameserver/.mvn/
 /servers/gameserver/target/
 /servers/gameserver/gameserer.iml
 
-/servers/connectserver/.mvn/
-/servers/dataserver/.mvn/
-/servers/gameserver/.mvn/
-
-/servers/pom.xml
+/servers/servers.iml
