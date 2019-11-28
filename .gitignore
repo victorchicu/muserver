@@ -15,3 +15,5 @@
 /servers/connectserver/.mvn/
 /servers/dataserver/.mvn/
 /servers/gameserver/.mvn/
+
+/servers/pom.xml
