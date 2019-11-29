@@ -2,7 +2,7 @@ package muserver.game.server.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.base.BasePacketHandler;
+import muserver.base.server.BasePacketHandler;
 import muserver.game.server.configs.GameServerProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

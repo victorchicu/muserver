@@ -1,6 +1,6 @@
 package muserver.game.server;
 
-import muserver.base.BaseServer;
+import muserver.base.server.BaseServer;
 import muserver.game.server.utils.KeyReader;
 import muserver.game.server.channels.GameServerChannelHandler;
 import muserver.game.server.configs.GameServerProperties;

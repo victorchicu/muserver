@@ -3,7 +3,7 @@ package muserver.data.server.channels;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.base.BasePacketHandler;
+import muserver.base.server.BasePacketHandler;
 import muserver.data.server.configs.DataServerProperties;
 
 import java.util.HashMap;

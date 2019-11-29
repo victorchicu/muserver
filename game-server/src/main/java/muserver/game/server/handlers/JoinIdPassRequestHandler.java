@@ -3,8 +3,8 @@ package muserver.game.server.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.base.BasePacketHandler;
-import muserver.base.types.JoinResult;
+import muserver.base.server.BasePacketHandler;
+import muserver.base.server.types.JoinResult;
 import muserver.game.server.utils.MuCryptUtils;
 import muserver.game.server.configs.GameServerProperties;
 

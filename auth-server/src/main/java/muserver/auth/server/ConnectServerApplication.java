@@ -1,8 +1,8 @@
-package muserver.connect.server;
+package muserver.auth.server;
 
-import muserver.base.BaseServer;
-import muserver.connect.server.channels.ConnectServerChannelHandler;
-import muserver.connect.server.configs.ConnectServerProperties;
+import muserver.auth.server.channels.ConnectServerChannelHandler;
+import muserver.auth.server.configs.ConnectServerProperties;
+import muserver.base.server.BaseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

@@ -1,15 +1,15 @@
-package muserver.connect.server.channels;
+package muserver.auth.server.channels;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.connect.server.handlers.AcceptClientHandler;
-import muserver.connect.server.handlers.ServerConnectHandler;
-import muserver.connect.server.handlers.ServerListHandler;
-import muserver.connect.server.configs.ConnectServerProperties;
-import muserver.base.BasePacketHandler;
+import muserver.auth.server.handlers.AcceptClientHandler;
+import muserver.auth.server.handlers.ServerConnectHandler;
+import muserver.auth.server.handlers.ServerListHandler;
+import muserver.auth.server.configs.ConnectServerProperties;
+import muserver.base.server.BasePacketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

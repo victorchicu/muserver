@@ -1,4 +1,4 @@
-package muserver.connect.server.configs;
+package muserver.auth.server.configs;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
