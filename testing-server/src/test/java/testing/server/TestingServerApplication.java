@@ -1,4 +1,4 @@
-package muserver.herder.server;
+package testing.server;
 
 import muserver.auth.server.AuthServerApplication;
 import muserver.data.server.DataServerApplication;
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { AuthServerApplication.class, DataServerApplication.class, GameServerApplication.class })
-public class HerderServerApplication {
+public class TestingServerApplication {
  public static void main(String... args) throws Exception {
-  SpringApplication.run(HerderServerApplication.class, args);
+  SpringApplication.run(TestingServerApplication.class, args);
  }
 }
