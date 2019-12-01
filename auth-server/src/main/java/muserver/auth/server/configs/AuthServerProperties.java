@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-@ConfigurationProperties(prefix = "connectserver")
-@EnableConfigurationProperties(ConnectServerProperties.class)
-public class ConnectServerProperties {
+@ConfigurationProperties(prefix = "authserver")
+@EnableConfigurationProperties(AuthServerProperties.class)
+public class AuthServerProperties {
  private Integer port;
  private Map<Integer, Server> servers;
 

@@ -2,7 +2,7 @@ package muserver.auth.server.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.base.server.BasePacketHandler;
+import muserver.server.base.BasePacketHandler;
 
 public class AcceptClientHandler extends BasePacketHandler {
  @Override

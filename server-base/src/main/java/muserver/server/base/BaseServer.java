@@ -1,4 +1,4 @@
-package muserver.base.server;
+package muserver.server.base;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

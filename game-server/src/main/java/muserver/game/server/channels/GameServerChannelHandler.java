@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.base.server.BasePacketHandler;
+import muserver.server.base.BasePacketHandler;
 import muserver.game.server.utils.MuDecoder;
 import muserver.game.server.handlers.AcceptClientHandler;
 import muserver.game.server.handlers.DataServerGetCharListRequestHandler;

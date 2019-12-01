@@ -2,7 +2,7 @@ package muserver.game.server.handlers;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.base.server.BasePacketHandler;
+import muserver.server.base.BasePacketHandler;
 import muserver.game.server.configs.GameServerProperties;
 
 public class AcceptClientHandler extends BasePacketHandler {

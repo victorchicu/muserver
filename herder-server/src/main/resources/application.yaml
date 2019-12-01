@@ -2,7 +2,7 @@ logging:
   level:
     ROOT: info
 ---
-connectserver:
+authserver:
   port: 44405
   servers:
     0:

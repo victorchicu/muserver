@@ -3,13 +3,13 @@ package muserver.auth.server.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.auth.server.configs.ConnectServerProperties;
-import muserver.base.server.BasePacketHandler;
+import muserver.auth.server.configs.AuthServerProperties;
+import muserver.server.base.BasePacketHandler;
 
 public class ServerConnectHandler extends BasePacketHandler {
-    private final ConnectServerProperties props;
+    private final AuthServerProperties props;
 
-    public ServerConnectHandler(ConnectServerProperties props) {
+    public ServerConnectHandler(AuthServerProperties props) {
         this.props = props;
     }
 
@@ -17,7 +17,7 @@ public class ServerConnectHandler extends BasePacketHandler {
     public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-        ConnectServerProperties.Server server = props.getServers().get(serverCode);
+        AuthServerProperties.Server server = props.getServers().get(serverCode);
 
         int size = 22;
 

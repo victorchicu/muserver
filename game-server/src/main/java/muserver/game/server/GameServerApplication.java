@@ -1,6 +1,6 @@
 package muserver.game.server;
 
-import muserver.base.server.BaseServer;
+import muserver.server.base.BaseServer;
 import muserver.game.server.utils.KeyReader;
 import muserver.game.server.channels.GameServerChannelHandler;
 import muserver.game.server.configs.GameServerProperties;
@@ -23,7 +23,8 @@ public class GameServerApplication  extends BaseServer implements CommandLineRun
 
  @Override
  public void run(String... args) throws Exception {
-  File enc2Dat = ResourceUtils.getFile("classpath:Enc2.dat"), dec1Dat = ResourceUtils.getFile("classpath:Dec1.dat");
+  File enc2Dat = ResourceUtils.getFile("classpath:encryption/Enc2.dat");
+  File dec1Dat = ResourceUtils.getFile("classpath:encryption/Dec1.dat");
   KeyReader.readEnc2DatFile(enc2Dat.toPath());
   KeyReader.readDec1DatFile(dec1Dat.toPath());
   start(gameServerProperties.getPort(), new GameServerChannelHandler(gameServerProperties));

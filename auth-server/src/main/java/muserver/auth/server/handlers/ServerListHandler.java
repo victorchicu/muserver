@@ -3,13 +3,13 @@ package muserver.auth.server.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.auth.server.configs.ConnectServerProperties;
-import muserver.base.server.BasePacketHandler;
+import muserver.auth.server.configs.AuthServerProperties;
+import muserver.server.base.BasePacketHandler;
 
 public class ServerListHandler extends BasePacketHandler {
-    private final ConnectServerProperties props;
+    private final AuthServerProperties props;
 
-    public ServerListHandler(ConnectServerProperties props) {
+    public ServerListHandler(AuthServerProperties props) {
         this.props = props;
     }
 

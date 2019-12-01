@@ -9,7 +9,7 @@
 
  <modelVersion>4.0.0</modelVersion>
 
- <artifactId>base-server</artifactId>
+ <artifactId>server-base</artifactId>
 
  <properties>
   <io.netty.version>4.1.36.Final</io.netty.version>

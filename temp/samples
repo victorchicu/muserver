@@ -1,7 +1,0 @@
-@SpringBootApplication
-@ComponentScan(basePackageClasses = { ConnectServerApplication.class, GameServerApplication.class })
-public class MainTest {
- public static void main(String... args) throws Exception {
-  SpringApplication.run(MainTest.class, args);
- }
-}

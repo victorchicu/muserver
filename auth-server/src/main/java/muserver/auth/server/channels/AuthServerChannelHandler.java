@@ -8,20 +8,20 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.auth.server.handlers.AcceptClientHandler;
 import muserver.auth.server.handlers.ServerConnectHandler;
 import muserver.auth.server.handlers.ServerListHandler;
-import muserver.auth.server.configs.ConnectServerProperties;
-import muserver.base.server.BasePacketHandler;
+import muserver.auth.server.configs.AuthServerProperties;
+import muserver.server.base.BasePacketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConnectServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private static final Logger logger = LoggerFactory.getLogger(ConnectServerChannelHandler.class);
+public class AuthServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private static final Logger logger = LoggerFactory.getLogger(AuthServerChannelHandler.class);
 
  private final Map<Integer, BasePacketHandler> packets;
 
- public ConnectServerChannelHandler(ConnectServerProperties props) {
+ public AuthServerChannelHandler(AuthServerProperties props) {
   packets = new HashMap<>();
   packets.put(0xF403, new ServerConnectHandler(props));
   packets.put(0xF406, new ServerListHandler(props));
