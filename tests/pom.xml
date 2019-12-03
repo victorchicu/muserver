@@ -13,20 +13,23 @@
  <dependencies>
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>auth-server</artifactId>
+   <artifactId>connectserver</artifactId>
    <version>${parent.version}</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>data-server</artifactId>
+   <artifactId>dataserver</artifactId>
    <version>${parent.version}</version>
+   <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>game-server</artifactId>
+   <artifactId>gameserver</artifactId>
    <version>${parent.version}</version>
+   <scope>test</scope>
   </dependency>
  </dependencies>
 </project>
