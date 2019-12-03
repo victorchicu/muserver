@@ -58,7 +58,7 @@
   <module>auth-server</module>
   <module>data-server</module>
   <module>game-server</module>
-  <module>herder-server</module>
   <module>server-base</module>
+  <module>tests</module>
  </modules>
 </project>
