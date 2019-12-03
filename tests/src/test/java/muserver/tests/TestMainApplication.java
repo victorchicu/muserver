@@ -1,4 +1,4 @@
-package testing.server;
+package muserver.tests;
 
 import muserver.auth.server.AuthServerApplication;
 import muserver.data.server.DataServerApplication;
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { AuthServerApplication.class, DataServerApplication.class, GameServerApplication.class })
-public class TestingServerApplication {
+public class TestMainApplication {
  public static void main(String... args) throws Exception {
-  SpringApplication.run(TestingServerApplication.class, args);
+  SpringApplication.run(TestMainApplication.class, args);
  }
 }
