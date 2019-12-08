@@ -1,10 +1,10 @@
 package muserver.connectserver.handlers;
 
+import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.connectserver.configs.ConnectServerProperties;
-import muserver.serverbase.BasePacketHandler;
 
 public class ServerConnectHandler extends BasePacketHandler {
     private final ConnectServerProperties props;

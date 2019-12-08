@@ -1,12 +1,12 @@
 package muserver.gameserver.handlers;
 
+import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import muserver.gameserver.configs.GameServerProperties;
 import muserver.gameserver.utils.MuCryptUtils;
-import muserver.serverbase.BasePacketHandler;
-import muserver.serverbase.types.JoinResult;
+import types.JoinResult;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

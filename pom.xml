@@ -31,10 +31,10 @@
  </build>
 
  <modules>
+  <module>common</module>
   <module>connectserver</module>
   <module>dataserver</module>
   <module>gameserver</module>
-  <module>serverbase</module>
   <module>tests</module>
  </modules>
 </project>

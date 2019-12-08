@@ -1,8 +1,8 @@
 package muserver.connectserver.handlers;
 
+import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import muserver.serverbase.BasePacketHandler;
 
 public class AcceptClientHandler extends BasePacketHandler {
  @Override

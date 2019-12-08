@@ -1,5 +1,6 @@
 package muserver.connectserver.channels;
 
+import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
@@ -9,7 +10,6 @@ import muserver.connectserver.handlers.AcceptClientHandler;
 import muserver.connectserver.handlers.ServerConnectHandler;
 import muserver.connectserver.handlers.ServerListHandler;
 import muserver.connectserver.configs.ConnectServerProperties;
-import muserver.serverbase.BasePacketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

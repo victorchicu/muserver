@@ -1,4 +1,4 @@
-package muserver.serverbase;
+package base;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -9,23 +9,40 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 
 import java.util.concurrent.TimeUnit;
 
 public abstract class BaseServer {
+ private static final Logger logger = LoggerFactory.getLogger(BaseServer.class);
+
+ private final StopWatch stopWatch;
  private final EventLoopGroup tcpParentLoopGroup, tcpChildLoopGroup;
 
  public BaseServer() {
+  stopWatch = new StopWatch();
   tcpChildLoopGroup = new NioEventLoopGroup(1);
   tcpParentLoopGroup = new NioEventLoopGroup(1);
  }
 
  public ChannelFuture start(int port, SimpleChannelInboundHandler<ByteBuf>... handlers) {
-  return new ServerBootstrap()
+  logger.info("Starting {} on port {}", getClass().getSimpleName(), port);
+
+  stopWatch.start();
+
+  ChannelFuture serverBootstrap = new ServerBootstrap()
     .group(tcpParentLoopGroup, tcpChildLoopGroup)
     .channel(NioServerSocketChannel.class)
     .childHandler(new ChannelsInitializer(handlers))
     .bind(port);
+
+  stopWatch.stop();
+
+  logger.info("Started {} in {} seconds", getClass().getSimpleName(), stopWatch.getTotalTimeSeconds());
+
+  return serverBootstrap;
  }
 
  public void shutdownGracefully() {

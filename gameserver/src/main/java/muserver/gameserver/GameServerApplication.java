@@ -1,6 +1,6 @@
 package muserver.gameserver;
 
-import muserver.serverbase.BaseServer;
+import base.BaseServer;
 import muserver.gameserver.utils.KeyReader;
 import muserver.gameserver.channels.GameServerChannelHandler;
 import muserver.gameserver.configs.GameServerProperties;
@@ -13,7 +13,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 
 @SpringBootApplication
-public class GameServerApplication  extends BaseServer implements CommandLineRunner {
+public class GameServerApplication extends BaseServer implements CommandLineRunner {
  @Autowired
  private GameServerProperties gameServerProperties;
 
@@ -23,10 +23,19 @@ public class GameServerApplication  extends BaseServer implements CommandLineRun
 
  @Override
  public void run(String... args) throws Exception {
-  File enc2Dat = ResourceUtils.getFile("classpath:encryption/Enc2.dat");
-  File dec1Dat = ResourceUtils.getFile("classpath:encryption/Dec1.dat");
+  File enc2Dat = ResourceUtils.getFile("classpath:Enc2.dat");
+  File dec1Dat = ResourceUtils.getFile("classpath:Dec1.dat");
+
   KeyReader.readEnc2DatFile(enc2Dat.toPath());
   KeyReader.readDec1DatFile(dec1Dat.toPath());
-  start(gameServerProperties.getPort(), new GameServerChannelHandler(gameServerProperties));
+
+  //todo: Add DataServerChannelHandler
+
+
+
+  start(
+    gameServerProperties.getPort(),
+    new GameServerChannelHandler(gameServerProperties)
+  );
  }
 }

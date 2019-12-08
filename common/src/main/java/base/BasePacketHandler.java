@@ -1,4 +1,4 @@
-package muserver.serverbase;
+package base;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

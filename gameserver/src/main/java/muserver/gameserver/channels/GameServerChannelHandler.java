@@ -1,5 +1,6 @@
 package muserver.gameserver.channels;
 
+import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
@@ -7,7 +8,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import muserver.gameserver.configs.GameServerProperties;
 import muserver.gameserver.utils.MuDecoder;
-import muserver.serverbase.BasePacketHandler;
 import muserver.gameserver.handlers.AcceptClientHandler;
 import muserver.gameserver.handlers.DataServerGetCharListRequestHandler;
 import muserver.gameserver.handlers.JoinIdPassRequestHandler;
@@ -26,9 +26,11 @@ public class GameServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
 
  public GameServerChannelHandler(GameServerProperties props) {
   packets = new HashMap<>();
+
   packets.put(0x0E00, new LiveClientHandler(props));
   packets.put(0xF101, new JoinIdPassRequestHandler(props));
   packets.put(0xF300, new DataServerGetCharListRequestHandler(props));
+
   this.props = props;
  }
 

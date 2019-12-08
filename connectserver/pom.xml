@@ -31,7 +31,7 @@
 
   <dependency>
    <groupId>muserver</groupId>
-   <artifactId>serverbase</artifactId>
+   <artifactId>common</artifactId>
    <version>${parent.version}</version>
   </dependency>
 

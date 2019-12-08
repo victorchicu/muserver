@@ -1,4 +1,4 @@
-package muserver.serverbase.types;
+package types;
 
 public enum JoinResult {
  PASSWORD_IS_INCORRECT((byte) 0),

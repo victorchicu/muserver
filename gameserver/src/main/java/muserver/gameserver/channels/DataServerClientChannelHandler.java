@@ -1,27 +1,28 @@
-package muserver.dataserver.channels;
+package muserver.gameserver.channels;
 
 import base.BasePacketHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import muserver.dataserver.configs.DataServerProperties;
-import muserver.dataserver.handlers.GJPCharacterListRequestCS;
+import io.netty.util.CharsetUtil;
+import muserver.gameserver.handlers.AcceptClientHandler;
+import muserver.gameserver.utils.MuDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataServerChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
- private static final Logger logger = LoggerFactory.getLogger(DataServerChannelHandler.class);
+public class DataServerClientChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+ private static final Logger logger = LoggerFactory.getLogger(DataServerClientChannelHandler.class);
 
  private final Map<Integer, BasePacketHandler> packets;
 
- public DataServerChannelHandler(DataServerProperties props) {
+ public DataServerClientChannelHandler() {
   packets = new HashMap<>();
 
-  packets.put(0x01, new GJPCharacterListRequestCS(props));
 
  }
 
@@ -40,8 +41,8 @@ public class DataServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
  }
 
  @Override
- public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-  logger.error(cause.getMessage(), cause);
+ public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
+  logger.error(e.getMessage(), e);
   ctx.close();
  }
 
@@ -53,5 +54,6 @@ public class DataServerChannelHandler extends SimpleChannelInboundHandler<ByteBu
  @Override
  protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) {
   logger.info("RECEIVED PACKET\n{}", ByteBufUtil.prettyHexDump(byteBuf));
+
  }
 }

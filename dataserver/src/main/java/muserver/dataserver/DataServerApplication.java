@@ -1,8 +1,8 @@
 package muserver.dataserver;
 
+import base.BaseServer;
 import muserver.dataserver.channels.DataServerChannelHandler;
 import muserver.dataserver.configs.DataServerProperties;
-import muserver.serverbase.BaseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
