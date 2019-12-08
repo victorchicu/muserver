@@ -53,7 +53,7 @@ public class JoinIdPassRequestHandler extends BasePacketHandler {
    return;
   }
 
-  if (!cliSerial.equalsIgnoreCase(props.getSerial())) {
+  if (!cliSerial.equalsIgnoreCase(props.getCliSerial())) {
 //   logger.warn("Invalid client serial: {}", cliSerial);
    sendJoinResult(ctx, JoinResult.NEW_VERSION_OF_GAME_IS_REQUIRED);
    ctx.close();

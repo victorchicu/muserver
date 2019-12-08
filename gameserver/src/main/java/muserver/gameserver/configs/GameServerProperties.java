@@ -8,16 +8,17 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "gameserver")
 @EnableConfigurationProperties(GameServerProperties.class)
 public class GameServerProperties {
- private String name;
+ private String host;
  private Integer port;
- private String version, serial;
+ private String version;
+ private String cliSerial;
 
- public String getName() {
-  return name;
+ public String getHost() {
+  return host;
  }
 
- public void setName(String name) {
-  this.name = name;
+ public void setHost(String host) {
+  this.host = host;
  }
 
  public Integer getPort() {
@@ -36,11 +37,11 @@ public class GameServerProperties {
   this.version = version;
  }
 
- public String getSerial() {
-  return serial;
+ public String getCliSerial() {
+  return cliSerial;
  }
 
- public void setSerial(String serial) {
-  this.serial = serial;
+ public void setCliSerial(String cliSerial) {
+  this.cliSerial = cliSerial;
  }
 }

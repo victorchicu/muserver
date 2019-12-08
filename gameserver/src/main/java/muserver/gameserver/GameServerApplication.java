@@ -1,6 +1,7 @@
 package muserver.gameserver;
 
 import base.BaseServer;
+import muserver.gameserver.clients.DataServerClient;
 import muserver.gameserver.utils.KeyReader;
 import muserver.gameserver.channels.GameServerChannelHandler;
 import muserver.gameserver.configs.GameServerProperties;
@@ -29,9 +30,8 @@ public class GameServerApplication extends BaseServer implements CommandLineRunn
   KeyReader.readEnc2DatFile(enc2Dat.toPath());
   KeyReader.readDec1DatFile(dec1Dat.toPath());
 
-  //todo: Add DataServerChannelHandler
-
-
+//  DataServerClient dataServerClient = new DataServerClient("localhost", 55960);
+//  dataServerClient.start();
 
   start(
     gameServerProperties.getPort(),

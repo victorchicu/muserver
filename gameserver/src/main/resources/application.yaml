@@ -2,7 +2,7 @@ logging:
   level:
     ROOT: info
 gameserver:
-  name: "GS-1"
+  host: "192.168.88.30"
   port: 55901
   version: "10405"
-  serial: "TbYehR2hFUPBKgZj"
+  cliSerial : "TbYehR2hFUPBKgZj"
