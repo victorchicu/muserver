@@ -12,7 +12,7 @@
  <artifactId>common</artifactId>
 
  <properties>
-  <io.netty.version>4.1.36.Final</io.netty.version>
+  <io.netty.version>4.1.42.Final</io.netty.version>
  </properties>
 
  <dependencies>
