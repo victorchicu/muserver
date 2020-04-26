@@ -1,0 +1,12 @@
+server:
+  port: 5901
+---
+logging:
+  level:
+    ROOT: info
+---
+gameserver:
+  host: "127.0.0.1"
+  port: 55901
+  version: "10405"
+  cliSerial : "TbYehR2hFUPBKgZj"

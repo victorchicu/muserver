@@ -1,0 +1,10 @@
+server:
+  port: 5960
+---
+logging:
+  level:
+    ROOT: info
+---
+dataserver:
+  host: "127.0.0.1"
+  port: 55960
