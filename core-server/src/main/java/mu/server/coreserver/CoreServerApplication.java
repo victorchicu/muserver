@@ -20,9 +20,9 @@ public class CoreServerApplication implements CommandLineRunner {
     private final CoreServerProperties coreServerProperties;
 
     @Autowired
-    public CoreServerApplication(CoreServerProperties authenticatorProperties) {
+    public CoreServerApplication(CoreServerProperties coreServerProperties) {
         parentGroup = childGroup = new NioEventLoopGroup(1);
-        this.coreServerProperties = authenticatorProperties;
+        this.coreServerProperties = coreServerProperties;
     }
 
     public static void main(String[] args) {
