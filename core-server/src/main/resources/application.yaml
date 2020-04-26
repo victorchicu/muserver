@@ -5,7 +5,7 @@ logging:
   level:
     ROOT: info
 ---
-gameserver:
+coreserver:
   host: "127.0.0.1"
   port: 55901
   version: "10405"

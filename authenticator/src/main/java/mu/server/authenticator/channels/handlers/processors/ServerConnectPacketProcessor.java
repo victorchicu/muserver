@@ -4,20 +4,20 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import mu.server.authenticator.channels.handlers.processors.base.BasePacketProcessor;
-import mu.server.authenticator.properties.AuthProperties;
+import mu.server.authenticator.properties.AuthenticatorProperties;
 
-public class ServerConnectProcessor extends BasePacketProcessor {
-    private final AuthProperties authProperties;
+public class ServerConnectPacketProcessor extends BasePacketProcessor {
+    private final AuthenticatorProperties authenticatorProperties;
 
-    public ServerConnectProcessor(AuthProperties authProperties) {
-        this.authProperties = authProperties;
+    public ServerConnectPacketProcessor(AuthenticatorProperties authenticatorProperties) {
+        this.authenticatorProperties = authenticatorProperties;
     }
 
     @Override
     public void execute(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-        AuthProperties.Server server = authProperties.getServers().get(serverCode);
+        AuthenticatorProperties.Server server = authenticatorProperties.getServers().get(serverCode);
 
         int size = 22;
 

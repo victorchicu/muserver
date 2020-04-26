@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "authserver")
-public class AuthProperties {
+@ConfigurationProperties(prefix = "authenticator")
+public class AuthenticatorProperties {
     private Integer port;
     private Map<Integer, Server> servers;
 

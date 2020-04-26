@@ -4,18 +4,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import mu.server.authenticator.channels.handlers.processors.base.BasePacketProcessor;
-import mu.server.authenticator.properties.AuthProperties;
+import mu.server.authenticator.properties.AuthenticatorProperties;
 
-public class ServerListProcessor extends BasePacketProcessor {
-    private final AuthProperties authProperties;
+public class ServerListPacketProcessor extends BasePacketProcessor {
+    private final AuthenticatorProperties authenticatorProperties;
 
-    public ServerListProcessor(AuthProperties authProperties) {
-        this.authProperties = authProperties;
+    public ServerListPacketProcessor(AuthenticatorProperties authenticatorProperties) {
+        this.authenticatorProperties = authenticatorProperties;
     }
 
     @Override
     public void execute(ChannelHandlerContext ctx, ByteBuf byteBuf) {
-        int size = (7 + (authProperties.getServers().size() * 4));
+        int size = (7 + (authenticatorProperties.getServers().size() * 4));
 
         ByteBuf directBuffer = Unpooled.directBuffer(size);
 
@@ -23,9 +23,9 @@ public class ServerListProcessor extends BasePacketProcessor {
         directBuffer.writeShort(size);
         directBuffer.writeByte(0xF4);
         directBuffer.writeByte(0x06);
-        directBuffer.writeShort(authProperties.getServers().size());
+        directBuffer.writeShort(authenticatorProperties.getServers().size());
 
-        for (Integer key : authProperties.getServers().keySet()) {
+        for (Integer key : authenticatorProperties.getServers().keySet()) {
             directBuffer.writeByte(key).writeByte(65 / 100 * 100).writeByte(50).writeByte(0xCC);
         }
 

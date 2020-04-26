@@ -5,7 +5,7 @@ logging:
   level:
     ROOT: info
 ---
-authserver:
+authenticator:
   port: 44405
   servers:
     0:

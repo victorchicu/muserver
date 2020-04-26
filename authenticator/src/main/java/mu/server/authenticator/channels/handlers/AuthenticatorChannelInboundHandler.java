@@ -5,27 +5,26 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import mu.server.authenticator.channels.handlers.processors.ServerListProcessor;
+import mu.server.authenticator.channels.handlers.processors.ServerListPacketProcessor;
 import mu.server.authenticator.channels.handlers.processors.base.BasePacketProcessor;
-import mu.server.authenticator.channels.handlers.processors.AcceptClientProcessor;
-import mu.server.authenticator.channels.handlers.processors.ServerConnectProcessor;
-import mu.server.authenticator.properties.AuthProperties;
+import mu.server.authenticator.channels.handlers.processors.AcceptClientPacketProcessor;
+import mu.server.authenticator.channels.handlers.processors.ServerConnectPacketProcessor;
+import mu.server.authenticator.properties.AuthenticatorProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AuthServerChannelInboundHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class AuthenticatorChannelInboundHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private static final Integer UNSIGNED_BYTE_MAX_VALUE = Byte.MAX_VALUE * 2 + 1;
     private static final Integer UNSIGNED_SHORT_MAX_VALUE = Short.MAX_VALUE * 2 + 1;
-    private static final Logger logger = LoggerFactory.getLogger(AuthServerChannelInboundHandler.class);
-    private static final Map<Integer, BasePacketProcessor> processors = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticatorChannelInboundHandler.class);
+    private static final Map<Integer, BasePacketProcessor> packetProcessors = new HashMap<>();
 
-    public AuthServerChannelInboundHandler(AuthProperties props) {
-        processors.put(0xF403, new ServerConnectProcessor(props));
-        processors.put(0xF406, new ServerListProcessor(props));
+    public AuthenticatorChannelInboundHandler(AuthenticatorProperties props) {
+        packetProcessors.put(0xF403, new ServerConnectPacketProcessor(props));
+        packetProcessors.put(0xF406, new ServerListPacketProcessor(props));
     }
 
     @Override
@@ -33,7 +32,7 @@ public class AuthServerChannelInboundHandler extends SimpleChannelInboundHandler
         if (ctx.channel().remoteAddress() != null) {
             logger.info("Accepted a client connection from remote address: {}", ctx.channel().remoteAddress().toString());
         }
-        new AcceptClientProcessor().execute(ctx, Unpooled.directBuffer(4));
+        new AcceptClientPacketProcessor().execute(ctx, Unpooled.directBuffer(4));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class AuthServerChannelInboundHandler extends SimpleChannelInboundHandler
 
         int opCode = byteBuf.readUnsignedShort();
 
-        BasePacketProcessor packetProcessor = processors.get(opCode);
+        BasePacketProcessor packetProcessor = packetProcessors.get(opCode);
 
         if (packetProcessor == null) {
             ctx.close();

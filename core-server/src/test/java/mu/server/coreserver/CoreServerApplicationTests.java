@@ -1,10 +1,10 @@
-package mu.server.authenticator;
+package mu.server.coreserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthServerApplicationTests {
+class CoreServerApplicationTests {
 
     @Test
     void contextLoads() {

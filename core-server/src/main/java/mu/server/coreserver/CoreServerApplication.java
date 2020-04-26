@@ -1,12 +1,12 @@
-package mu.server.authenticator;
+package mu.server.coreserver;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import mu.server.authenticator.channels.AuthChannelInitializer;
-import mu.server.authenticator.channels.handlers.AuthServerChannelInboundHandler;
-import mu.server.authenticator.properties.AuthProperties;
+import mu.server.coreserver.channels.CoreServerChannelInitializer;
+import mu.server.coreserver.channels.handlers.CoreServerChannelInboundHandler;
+import mu.server.coreserver.properties.CoreServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,27 +15,27 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.PreDestroy;
 
 @SpringBootApplication
-public class AuthServerApplication implements CommandLineRunner {
-    private final AuthProperties authProperties;
+public class CoreServerApplication implements CommandLineRunner {
     private final EventLoopGroup parentGroup, childGroup;
+    private final CoreServerProperties coreServerProperties;
 
     @Autowired
-    public AuthServerApplication(AuthProperties authProperties) {
-        this.authProperties = authProperties;
+    public CoreServerApplication(CoreServerProperties authenticatorProperties) {
         parentGroup = childGroup = new NioEventLoopGroup(1);
+        this.coreServerProperties = authenticatorProperties;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServerApplication.class, args);
+        SpringApplication.run(CoreServerApplication.class, args);
     }
 
     @Override
     public void run(String... args) {
         new ServerBootstrap().group(parentGroup, childGroup).channel(NioServerSocketChannel.class).childHandler(
-                new AuthChannelInitializer(
-                        new AuthServerChannelInboundHandler(authProperties)
+                new CoreServerChannelInitializer(
+                        new CoreServerChannelInboundHandler(coreServerProperties)
                 )
-        ).bind(authProperties.getPort());
+        ).bind(coreServerProperties.getPort());
     }
 
     @PreDestroy
