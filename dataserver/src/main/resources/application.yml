@@ -1,9 +1,0 @@
-logging:
-  level:
-    ROOT: info
----
-dataserver:
-  host: "192.168.88.30"
-  port: 55960
-
-
