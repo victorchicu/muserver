@@ -1,4 +1,4 @@
-package mu.server.authserver.properties;
+package mu.server.authenticator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

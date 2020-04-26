@@ -1,22 +1,23 @@
-package mu.server.authserver.handlers;
+package mu.server.authenticator.channels.handlers.processors;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import mu.server.authserver.properties.AuthProperties;
+import mu.server.authenticator.channels.handlers.processors.base.BasePacketProcessor;
+import mu.server.authenticator.properties.AuthProperties;
 
-public class ServerConnectHandler extends BasePacketHandler {
-    private final AuthProperties props;
+public class ServerConnectProcessor extends BasePacketProcessor {
+    private final AuthProperties authProperties;
 
-    public ServerConnectHandler(AuthProperties props) {
-        this.props = props;
+    public ServerConnectProcessor(AuthProperties authProperties) {
+        this.authProperties = authProperties;
     }
 
     @Override
-    public void send(ChannelHandlerContext ctx, ByteBuf byteBuf) {
+    public void execute(ChannelHandlerContext ctx, ByteBuf byteBuf) {
         int serverCode = byteBuf.readUnsignedShort();
 
-        AuthProperties.Server server = props.getServers().get(serverCode);
+        AuthProperties.Server server = authProperties.getServers().get(serverCode);
 
         int size = 22;
 
@@ -27,16 +28,13 @@ public class ServerConnectHandler extends BasePacketHandler {
         directBuffer.writeByte(0xF4);
         directBuffer.writeByte(3);
 
-        int i = 0;
-
         for (byte val : server.getIp().getBytes()) {
             directBuffer.writeByte(val);
-            i++;
         }
 
         directBuffer.writeByte(0);
 
-        int n = 16 - i - 1;
+        int n = 16 - server.getIp().getBytes().length - 1;
 
         while (n > 0) {
             directBuffer.writeByte(0xFE);
@@ -45,6 +43,6 @@ public class ServerConnectHandler extends BasePacketHandler {
 
         directBuffer.writeShortLE(server.getPort());
 
-        super.send(ctx, directBuffer);
+        ctx.writeAndFlush(directBuffer);
     }
 }

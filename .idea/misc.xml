@@ -8,6 +8,10 @@
         <option value="$PROJECT_DIR$/auth-server/pom.xml" />
         <option value="$PROJECT_DIR$/data-server/pom.xml" />
         <option value="$PROJECT_DIR$/game-server/pom.xml" />
+        <option value="$PROJECT_DIR$/authenticator/pom.xml" />
+        <option value="$PROJECT_DIR$/data-access/pom.xml" />
+        <option value="$PROJECT_DIR$/dataaccess/pom.xml" />
+        <option value="$PROJECT_DIR$/core-server/pom.xml" />
       </list>
     </option>
   </component>

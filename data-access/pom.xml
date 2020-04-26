@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>mu.server</groupId>
-    <artifactId>data-server</artifactId>
+    <artifactId>data-access</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>data-server</name>
+    <name>data-access</name>
     <description>A database server is a server which uses a database application that provides database services to other computer programs or to computers, as defined by the client–server model.</description>
 
     <properties>
