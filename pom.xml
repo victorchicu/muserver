@@ -5,5 +5,13 @@
     <groupId>mu.server</groupId>
     <artifactId>root</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>muserver</name>
+    <description>Mu Server</description>
 
+    <modules>
+        <module>auth-server</module>
+        <module>core-server</module>
+        <module>data-server</module>
+    </modules>
 </project>

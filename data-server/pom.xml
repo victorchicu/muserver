@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>mu.server</groupId>
-    <artifactId>core-server</artifactId>
+    <artifactId>data-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>core-server</name>
+    <name>data-server</name>
     <description>
-        A game server (also sometimes referred to as a host) is a server which is the authoritative source of events in a multiplayer video game. The server transmits enough data about its internal state to allow its connected clients to maintain their own accurate version of the game world for display to players. They also receive and process each player's input.
+        A database server is a server which uses a database application that provides database services to other computer programs or to computers, as defined by the client–server model.
     </description>
 
     <properties>
@@ -40,12 +40,6 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.49.Final</version>
         </dependency>
     </dependencies>
 
